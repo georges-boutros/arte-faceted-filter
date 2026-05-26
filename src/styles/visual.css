@@ -676,6 +676,120 @@
   word-break: break-word;
 }
 
+/* ----------------------------------------------------------------
+   Selection Summary — read-only removable chips
+   ---------------------------------------------------------------- */
+
+.ff-summary {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-unit);
+}
+
+.ff-summary__empty {
+  padding: 10px 4px;
+  color: var(--text-secondary);
+  font-size: 12px;
+  text-align: left;
+}
+
+.ff-summary__group {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.ff-summary__group-label {
+  flex: 0 0 auto;
+  padding: 4px 0;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  min-width: 80px;
+}
+
+.ff-summary__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--cell-space);
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.ff-summary__chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 28px;
+  padding: 0 4px 0 10px;
+  background: var(--chip-selected-bg);
+  color: var(--chip-selected-text);
+  border: 1px solid var(--chip-selected-bg);
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  max-width: 100%;
+  overflow: hidden;
+}
+
+.ff-summary__chip-value {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+}
+
+.ff-summary__chip-remove {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.18);
+  color: var(--chip-selected-text);
+  cursor: pointer;
+  transition: background-color 120ms ease;
+  flex: 0 0 auto;
+}
+
+.ff-summary__chip-remove:hover {
+  background: rgba(255, 255, 255, 0.32);
+}
+
+.ff-summary__chip-remove:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--selected-bg);
+}
+
+/* Selection-only mode tweaks: drop the heavy card chrome — the chips
+   already carry the visual weight. */
+.ff-root.is-selection-only .cds-card {
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+  padding: 0;
+}
+
+.ff-root.is-selection-only .ff-card {
+  padding: 0;
+}
+
+@media (max-width: 420px) {
+  .ff-summary__group {
+    flex-direction: column;
+    gap: 4px;
+  }
+  .ff-summary__group-label {
+    min-width: 0;
+  }
+}
+
 /* Focus */
 .cds-root input:focus,
 .cds-root select:focus,

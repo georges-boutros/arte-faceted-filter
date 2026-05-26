@@ -27,7 +27,17 @@
         "showReset": { "displayName": "Show Reset Button", "type": { "bool": true } },
         "showFooter": { "displayName": "Show Selected Value Footer", "type": { "bool": true } },
         "showFacetSearch": { "displayName": "Show Search In Facets", "type": { "bool": true } },
-        "embedTitleInDropdown": { "displayName": "Embed Title In Dropdown", "type": { "bool": true } }
+        "embedTitleInDropdown": { "displayName": "Embed Title In Dropdown", "type": { "bool": true } },
+        "displayMode": {
+          "displayName": "Display Mode",
+          "description": "Full = filters + selection footer. Selection only = removable chips, no filter controls (place filters elsewhere in the report).",
+          "type": {
+            "enumeration": [
+              { "displayName": "Full (filters + summary)", "value": "full" },
+              { "displayName": "Selection only (removable chips)", "value": "selection-only" }
+            ]
+          }
+        }
       }
     },
     "layout": {

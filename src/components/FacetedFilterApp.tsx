@@ -6,6 +6,7 @@ import { getFacetStrings } from "../services/localizationService";
 import { ReportThemeContext, resolveTheme } from "../services/themeService";
 import { VisualSettings } from "../settings";
 import { FacetPanel } from "./FacetPanel";
+import { SelectionSummary } from "./SelectionSummary";
 
 interface FacetedFilterAppProps {
   settings: VisualSettings;
@@ -55,10 +56,14 @@ export const FacetedFilterApp: React.FC<FacetedFilterAppProps> = ({
   }, [settings.layout.orientation, viewportWidth, viewportHeight]);
 
   const hasActiveSelection = visibleFacets.some((facet) => facet.selectedKeys.length > 0);
+  const isSelectionOnly = settings.general.displayMode === "selection-only";
   const showTopBar = settings.general.showHeader || settings.general.showReset;
-  const resolvedTitle = settings.general.titleText?.trim() ? settings.general.titleText : strings.title;
+  const fallbackTitle = isSelectionOnly ? strings.activeFilters : strings.title;
+  const resolvedTitle = settings.general.titleText?.trim() ? settings.general.titleText : fallbackTitle;
   const showFooter =
-    settings.general.showFooter && (hasActiveSelection || settings.general.showNoFilterMessage);
+    !isSelectionOnly &&
+    settings.general.showFooter &&
+    (hasActiveSelection || settings.general.showNoFilterMessage);
 
   const footerLabel = React.useMemo(() => {
     if (!hasActiveSelection) {
@@ -96,7 +101,7 @@ export const FacetedFilterApp: React.FC<FacetedFilterAppProps> = ({
 
   return (
     <div
-      className={`cds-root ff-root is-${orientation}`}
+      className={`cds-root ff-root is-${orientation} ${isSelectionOnly ? "is-selection-only" : ""}`}
       data-theme={resolvedTheme.themeName}
       style={themedStyle}
     >
@@ -123,6 +128,12 @@ export const FacetedFilterApp: React.FC<FacetedFilterAppProps> = ({
           <div className="ff-empty">
             {facets.length === 0 ? strings.noFieldsBound : strings.allFacetsHidden}
           </div>
+        ) : isSelectionOnly ? (
+          <SelectionSummary
+            facets={visibleFacets}
+            strings={strings}
+            onFacetSelectionChange={onFacetSelectionChange}
+          />
         ) : (
           <div className="ff-grid" style={gridStyle}>
             {visibleFacets.map((facet) => (

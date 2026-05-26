@@ -1,6 +1,8 @@
 import powerbi from "powerbi-visuals-api";
 import { FacetSortOrder, SelectionMode, SelectorType } from "./models/Facet";
 
+export type DisplayMode = "full" | "selection-only";
+
 export class GeneralSettings {
   public showHeader = true;
   public titleText = "";
@@ -10,6 +12,7 @@ export class GeneralSettings {
   public showFooter = true;
   public showFacetSearch = true;
   public embedTitleInDropdown = true;
+  public displayMode: DisplayMode = "full";
 }
 
 export class LayoutSettings {
@@ -110,6 +113,9 @@ export class VisualSettings {
       "general",
       "embedTitleInDropdown",
       settings.general.embedTitleInDropdown
+    );
+    settings.general.displayMode = getDisplayMode(
+      getValue<string>(objects, "general", "displayMode", settings.general.displayMode)
     );
 
     settings.layout.orientation = getOrientation(
@@ -252,7 +258,8 @@ export class VisualSettings {
               showReset: settings.general.showReset,
               showFooter: settings.general.showFooter,
               showFacetSearch: settings.general.showFacetSearch,
-              embedTitleInDropdown: settings.general.embedTitleInDropdown
+              embedTitleInDropdown: settings.general.embedTitleInDropdown,
+              displayMode: settings.general.displayMode
             }
           }
         ];
@@ -358,6 +365,10 @@ function getThemeMode(value: string): "auto" | "light" | "dark" | "custom" {
     default:
       return "auto";
   }
+}
+
+function getDisplayMode(value: string): DisplayMode {
+  return value === "selection-only" ? "selection-only" : "full";
 }
 
 function getOrientation(value: string): "auto" | "horizontal" | "vertical" {
