@@ -1,0 +1,24 @@
+{
+  "visual": {
+    "name": "arteFacetedFilter",
+    "displayName": "ARTE Faceted Filter",
+    "guid": "arteFacetedFilterB5C72A11",
+    "visualClassName": "Visual",
+    "version": "0.1.0.0",
+    "description": "Filtre à facettes pour Power BI conçu par la Plateforme Data ARTE — combine plusieurs segments dans un panneau cohérent, avec cascade dynamique, mises en page flexibles, sélecteurs variés (listes déroulantes, vignettes, bascules, listes, radios, cases à cocher) et thème clair/sombre.",
+    "supportUrl": "https://arte.tv",
+    "gitHubUrl": "https://arte.tv"
+  },
+  "apiVersion": "5.4.0",
+  "author": {
+    "name": "Plateforme Data ARTE",
+    "email": "data@arte.tv"
+  },
+  "assets": {
+    "icon": "assets/icon.png"
+  },
+  "style": "style/visual.less",
+  "capabilities": "capabilities.json",
+  "dependencies": null,
+  "stringResources": []
+}

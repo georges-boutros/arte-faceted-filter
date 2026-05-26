@@ -1,0 +1,186 @@
+{
+  "privileges": [],
+  "dataRoles": [
+    {
+      "displayName": "Facets",
+      "description": "Ajoutez jusqu'à 8 colonnes catégorielles. Chaque colonne devient une facette dans le panneau.",
+      "name": "facetField",
+      "kind": "Grouping"
+    }
+  ],
+  "objects": {
+    "general": {
+      "displayName": "General",
+      "properties": {
+        "filter": { "displayName": "Filter", "type": { "filter": true } },
+        "filter2": { "displayName": "Filter 2", "type": { "filter": true } },
+        "filter3": { "displayName": "Filter 3", "type": { "filter": true } },
+        "filter4": { "displayName": "Filter 4", "type": { "filter": true } },
+        "filter5": { "displayName": "Filter 5", "type": { "filter": true } },
+        "filter6": { "displayName": "Filter 6", "type": { "filter": true } },
+        "filter7": { "displayName": "Filter 7", "type": { "filter": true } },
+        "filter8": { "displayName": "Filter 8", "type": { "filter": true } },
+        "showHeader": { "displayName": "Show Header", "type": { "bool": true } },
+        "titleText": { "displayName": "Header Title", "type": { "text": true } },
+        "showNoFilterMessage": { "displayName": "Show \"No Selection\" Message", "type": { "bool": true } },
+        "showVisualFrame": { "displayName": "Show Visual Frame", "type": { "bool": true } },
+        "showReset": { "displayName": "Show Reset Button", "type": { "bool": true } },
+        "showFooter": { "displayName": "Show Selected Value Footer", "type": { "bool": true } },
+        "showFacetSearch": { "displayName": "Show Search In Facets", "type": { "bool": true } },
+        "embedTitleInDropdown": { "displayName": "Embed Title In Dropdown", "type": { "bool": true } }
+      }
+    },
+    "layout": {
+      "displayName": "Layout",
+      "properties": {
+        "orientation": {
+          "displayName": "Panel Orientation",
+          "type": {
+            "enumeration": [
+              { "displayName": "Auto", "value": "auto" },
+              { "displayName": "Horizontal", "value": "horizontal" },
+              { "displayName": "Vertical", "value": "vertical" }
+            ]
+          }
+        },
+        "enableCascade": { "displayName": "Cascade Filtering", "type": { "bool": true } },
+        "minFacetWidth": { "displayName": "Min Facet Width (px)", "type": { "numeric": true } }
+      }
+    },
+    "facetDefaults": {
+      "displayName": "Facet Defaults",
+      "properties": {
+        "selectorType": {
+          "displayName": "Default Selector Type",
+          "type": {
+            "enumeration": [
+              { "displayName": "Dropdown", "value": "dropdown" },
+              { "displayName": "Chips (vignettes)", "value": "chips" },
+              { "displayName": "Toggle", "value": "toggle" },
+              { "displayName": "List", "value": "list" },
+              { "displayName": "Radio (single)", "value": "radio" },
+              { "displayName": "Checkbox (multi)", "value": "checkbox" }
+            ]
+          }
+        },
+        "selectionMode": {
+          "displayName": "Default Selection Mode",
+          "type": {
+            "enumeration": [
+              { "displayName": "Single Selection", "value": "single" },
+              { "displayName": "Multiple Selection", "value": "multi" }
+            ]
+          }
+        },
+        "sortOrder": {
+          "displayName": "Default Sort Order",
+          "type": {
+            "enumeration": [
+              { "displayName": "Alphabetical (A→Z)", "value": "asc" },
+              { "displayName": "Alphabetical (Z→A)", "value": "desc" },
+              { "displayName": "Data order", "value": "data" }
+            ]
+          }
+        },
+        "showCount": { "displayName": "Show Item Count", "type": { "bool": true } }
+      }
+    },
+    "facetOptions": {
+      "displayName": "Per-Facet Options",
+      "properties": {
+        "selectorType": {
+          "displayName": "Selector Type",
+          "type": {
+            "enumeration": [
+              { "displayName": "Use default", "value": "default" },
+              { "displayName": "Dropdown", "value": "dropdown" },
+              { "displayName": "Chips (vignettes)", "value": "chips" },
+              { "displayName": "Toggle", "value": "toggle" },
+              { "displayName": "List", "value": "list" },
+              { "displayName": "Radio (single)", "value": "radio" },
+              { "displayName": "Checkbox (multi)", "value": "checkbox" }
+            ]
+          }
+        },
+        "selectionMode": {
+          "displayName": "Selection Mode",
+          "type": {
+            "enumeration": [
+              { "displayName": "Use default", "value": "default" },
+              { "displayName": "Single Selection", "value": "single" },
+              { "displayName": "Multiple Selection", "value": "multi" }
+            ]
+          }
+        },
+        "facetTitle": { "displayName": "Title Override", "type": { "text": true } },
+        "hidden": { "displayName": "Hide Facet", "type": { "bool": true } }
+      }
+    },
+    "style": {
+      "displayName": "Theme & Appearance",
+      "properties": {
+        "themeMode": {
+          "displayName": "Theme Mode",
+          "type": {
+            "enumeration": [
+              { "displayName": "Auto", "value": "auto" },
+              { "displayName": "Light", "value": "light" },
+              { "displayName": "Dark", "value": "dark" },
+              { "displayName": "Custom", "value": "custom" }
+            ]
+          }
+        },
+        "visualBackground": { "displayName": "Visual Background", "type": { "fill": { "solid": { "color": true } } } },
+        "panelBackground": { "displayName": "Panel Background", "type": { "fill": { "solid": { "color": true } } } },
+        "surfaceBackground": { "displayName": "Surface Background", "type": { "fill": { "solid": { "color": true } } } },
+        "borderColor": { "displayName": "Border Color", "type": { "fill": { "solid": { "color": true } } } },
+        "dividerColor": { "displayName": "Divider Color", "type": { "fill": { "solid": { "color": true } } } },
+        "textPrimaryColor": { "displayName": "Primary Text Color", "type": { "fill": { "solid": { "color": true } } } },
+        "textSecondaryColor": { "displayName": "Secondary Text Color", "type": { "fill": { "solid": { "color": true } } } },
+        "placeholderColor": { "displayName": "Placeholder Color", "type": { "fill": { "solid": { "color": true } } } },
+        "accentColor": { "displayName": "Accent Color", "type": { "fill": { "solid": { "color": true } } } },
+        "accentHoverColor": { "displayName": "Accent Hover Color", "type": { "fill": { "solid": { "color": true } } } },
+        "selectedBackgroundColor": { "displayName": "Selected Background Color", "type": { "fill": { "solid": { "color": true } } } },
+        "selectedTextColor": { "displayName": "Selected Text Color", "type": { "fill": { "solid": { "color": true } } } },
+        "focusBorderColor": { "displayName": "Focus Border Color", "type": { "fill": { "solid": { "color": true } } } },
+        "inputBackground": { "displayName": "Input Background", "type": { "fill": { "solid": { "color": true } } } },
+        "inputBorder": { "displayName": "Input Border", "type": { "fill": { "solid": { "color": true } } } },
+        "inputTextColor": { "displayName": "Input Text Color", "type": { "fill": { "solid": { "color": true } } } },
+        "dropdownBackground": { "displayName": "Dropdown Background", "type": { "fill": { "solid": { "color": true } } } },
+        "dropdownBorder": { "displayName": "Dropdown Border", "type": { "fill": { "solid": { "color": true } } } },
+        "buttonBackground": { "displayName": "Button Background", "type": { "fill": { "solid": { "color": true } } } },
+        "buttonBorder": { "displayName": "Button Border", "type": { "fill": { "solid": { "color": true } } } },
+        "buttonText": { "displayName": "Button Text", "type": { "fill": { "solid": { "color": true } } } },
+        "iconColor": { "displayName": "Icon Color", "type": { "fill": { "solid": { "color": true } } } },
+        "hoverBackgroundColor": { "displayName": "Hover Background Color", "type": { "fill": { "solid": { "color": true } } } },
+        "disabledBackgroundColor": { "displayName": "Disabled Background", "type": { "fill": { "solid": { "color": true } } } },
+        "disabledTextColor": { "displayName": "Disabled Text", "type": { "fill": { "solid": { "color": true } } } },
+        "shadowColor": { "displayName": "Shadow Color", "type": { "fill": { "solid": { "color": true } } } },
+        "borderRadius": { "displayName": "Border Radius", "type": { "numeric": true } },
+        "fontSize": { "displayName": "Font Size", "type": { "numeric": true } },
+        "compactDensity": { "displayName": "Compact Density", "type": { "numeric": true } },
+        "shadowEnabled": { "displayName": "Shadow On", "type": { "bool": true } },
+        "cellSpacing": { "displayName": "Cell Spacing", "type": { "numeric": true } }
+      }
+    }
+  },
+  "dataViewMappings": [
+    {
+      "conditions": [
+        {
+          "facetField": { "max": 8 }
+        }
+      ],
+      "categorical": {
+        "categories": {
+          "for": { "in": "facetField" },
+          "dataReductionAlgorithm": { "window": { "count": 30000 } }
+        }
+      }
+    }
+  ],
+  "supportsHighlight": false,
+  "sorting": {
+    "default": {}
+  }
+}
