@@ -676,6 +676,23 @@
   word-break: break-word;
 }
 
+.ff-footer__empty {
+  color: var(--text-secondary);
+}
+
+/* Slightly tighter chip dimensions when used inside the footer */
+.cds-footer .ff-summary__chip {
+  height: 24px;
+  font-size: 11px;
+  padding-left: 8px;
+  gap: 4px;
+}
+
+.cds-footer .ff-summary__chip-remove {
+  width: 18px;
+  height: 18px;
+}
+
 /* ----------------------------------------------------------------
    Selection Summary — read-only removable chips
    ---------------------------------------------------------------- */
@@ -684,6 +701,25 @@
   display: flex;
   flex-direction: column;
   gap: var(--space-unit);
+}
+
+/* Compact variant: chips flow inline with their facet title baked into
+   each chip ("Category: Marketing ×"). Used in the interactive footer. */
+.ff-summary--compact {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: var(--cell-space);
+}
+
+.ff-summary__chip-prefix {
+  color: rgba(255, 255, 255, 0.85);
+  font-weight: 500;
+}
+
+.ff-summary__chip-sep {
+  color: rgba(255, 255, 255, 0.6);
+  margin: 0 4px 0 2px;
 }
 
 .ff-summary__empty {

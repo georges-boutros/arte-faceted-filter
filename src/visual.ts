@@ -38,6 +38,15 @@ export class Visual implements IVisual {
   private viewportWidth = 0;
   private viewportHeight = 0;
   private reportTheme: ReportThemeContext = {};
+  /**
+   * Last-observed external filter signature per facet (keyed by queryName).
+   * We only resync a facet's selection from external state when its signature
+   * actually changes — otherwise we trust the in-memory state carried over by
+   * `buildFacetsFromDataView`. Without this, every Power BI `update()` after a
+   * user click would race-overwrite the selection with a stale empty filter,
+   * which is what caused the "I have to click several times" UX bug.
+   */
+  private externalSignatures: Map<string, string> = new Map();
 
   constructor(options?: VisualConstructorOptions) {
     if (!options) {
@@ -99,6 +108,14 @@ export class Visual implements IVisual {
     const targets = new Map<number, FilterColumnTarget>();
     const rowCount = limited[0]?.values?.length || 0;
 
+    // Carry over the in-memory selection from the previous update() so a
+    // user's click sticks even if the very next Power BI update() arrives
+    // before our `applyJsonFilter` has been persisted into jsonFilters or
+    // metadata.objects.
+    const previousSelectionsByQuery = new Map<string, string[]>(
+      this.facets.map((facet) => [facet.queryName, facet.selectedKeys])
+    );
+
     const facets: FacetColumn[] = limited.map((category, index) => {
       const override = VisualSettings.parsePerFacetOverride(category.source);
       const target = parseQueryNameToTarget(category.source.queryName);
@@ -134,9 +151,15 @@ export class Visual implements IVisual {
 
       const title = (override.facetTitle && override.facetTitle.trim()) || category.source.displayName || `Facet ${index + 1}`;
 
+      const queryName = category.source.queryName || `facet_${index}`;
+      const carriedKeys = (previousSelectionsByQuery.get(queryName) || []).filter((key) =>
+        optionMap.has(key)
+      );
+      const enforcedKeys = selectionMode === "single" ? carriedKeys.slice(0, 1) : carriedKeys;
+
       return {
         index,
-        queryName: category.source.queryName || `facet_${index}`,
+        queryName,
         displayName: category.source.displayName || `Facet ${index + 1}`,
         title,
         selectorType,
@@ -144,7 +167,7 @@ export class Visual implements IVisual {
         hidden: !!override.hidden,
         options: Array.from(optionMap.values()),
         availableKeys: new Set(optionMap.keys()),
-        selectedKeys: [],
+        selectedKeys: enforcedKeys,
         filterPropertyName: FILTER_PROPERTY_NAMES[index] || `filter${index + 1}`
       };
     });
@@ -170,14 +193,35 @@ export class Visual implements IVisual {
 
     return facets.map((facet) => {
       const persisted = externalSelections.get(facet.index);
-      if (!persisted) {
+      const externalSig = this.signatureFromKeys(persisted);
+      const lastSig = this.externalSignatures.get(facet.queryName);
+
+      // Signature unchanged → external state didn't actually change. Keep the
+      // selection we just carried over from the previous in-memory state so
+      // the user's most recent click sticks even if Power BI's persistence is
+      // a tick late.
+      if (lastSig === externalSig) {
         return facet;
+      }
+
+      this.externalSignatures.set(facet.queryName, externalSig);
+
+      if (!persisted || persisted.length === 0) {
+        // External cleared the filter — honor it.
+        return { ...facet, selectedKeys: [] };
       }
 
       const validKeys = persisted.filter((key) => facet.availableKeys.has(key));
       const finalKeys = facet.selectionMode === "single" ? validKeys.slice(0, 1) : validKeys;
       return { ...facet, selectedKeys: finalKeys };
     });
+  }
+
+  private signatureFromKeys(keys: string[] | undefined): string {
+    if (!keys || keys.length === 0) {
+      return "none";
+    }
+    return `vals:${[...keys].sort().join("|")}`;
   }
 
   private extractExternalSelections(

@@ -65,27 +65,6 @@ export const FacetedFilterApp: React.FC<FacetedFilterAppProps> = ({
     settings.general.showFooter &&
     (hasActiveSelection || settings.general.showNoFilterMessage);
 
-  const footerLabel = React.useMemo(() => {
-    if (!hasActiveSelection) {
-      return strings.noSelection;
-    }
-    const parts: string[] = [];
-    for (const facet of visibleFacets) {
-      if (!facet.selectedKeys.length) {
-        continue;
-      }
-      const selectedLabels = facet.selectedKeys.map(
-        (key) => facet.options.find((option) => option.key === key)?.label || key || "(blank)"
-      );
-      if (selectedLabels.length <= 2) {
-        parts.push(`${facet.title}: ${selectedLabels.join(", ")}`);
-      } else {
-        parts.push(`${facet.title}: ${selectedLabels.length} ${strings.selected}`);
-      }
-    }
-    return parts.length ? parts.join(" • ") : strings.noSelection;
-  }, [hasActiveSelection, visibleFacets, strings.noSelection, strings.selected]);
-
   const gridStyle: React.CSSProperties =
     orientation === "horizontal"
       ? {
@@ -153,7 +132,20 @@ export const FacetedFilterApp: React.FC<FacetedFilterAppProps> = ({
         )}
       </div>
 
-      {showFooter ? <div className="cds-footer ff-footer">{footerLabel}</div> : null}
+      {showFooter ? (
+        <div className="cds-footer ff-footer">
+          {hasActiveSelection ? (
+            <SelectionSummary
+              facets={visibleFacets}
+              strings={strings}
+              onFacetSelectionChange={onFacetSelectionChange}
+              compact
+            />
+          ) : (
+            <span className="ff-footer__empty">{strings.noSelection}</span>
+          )}
+        </div>
+      ) : null}
     </div>
   );
 };
