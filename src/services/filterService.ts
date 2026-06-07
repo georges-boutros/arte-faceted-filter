@@ -44,20 +44,29 @@ export function createBasicValuesFilter(
   };
 }
 
-export function applyBasicValuesFilter(
+/**
+ * Apply (or clear) every active facet filter in a single host.applyJsonFilter
+ * call. Power BI only fully cross-filters the report from one filter property
+ * — we pass an IFilter[] containing every active facet's basic IN filter so
+ * each report visual receives the AND-combination of all active facets.
+ */
+export function applyAllFacetFilters(
   host: powerbi.extensibility.visual.IVisualHost,
   objectName: string,
   propertyName: string,
-  target: FilterColumnTarget,
-  values: powerbi.PrimitiveValue[]
+  filters: BasicValuesFilter[]
 ): void {
-  if (!values.length) {
+  if (!filters.length) {
     clearFilter(host, objectName, propertyName);
     return;
   }
 
-  const filter = createBasicValuesFilter(target, values);
-  host.applyJsonFilter(filter as unknown as powerbi.IFilter, objectName, propertyName, powerbi.FilterAction.merge);
+  host.applyJsonFilter(
+    filters as unknown as powerbi.IFilter,
+    objectName,
+    propertyName,
+    powerbi.FilterAction.merge
+  );
 }
 
 export function clearFilter(

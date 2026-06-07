@@ -13,13 +13,6 @@
       "displayName": "General",
       "properties": {
         "filter": { "displayName": "Filter", "type": { "filter": true } },
-        "filter2": { "displayName": "Filter 2", "type": { "filter": true } },
-        "filter3": { "displayName": "Filter 3", "type": { "filter": true } },
-        "filter4": { "displayName": "Filter 4", "type": { "filter": true } },
-        "filter5": { "displayName": "Filter 5", "type": { "filter": true } },
-        "filter6": { "displayName": "Filter 6", "type": { "filter": true } },
-        "filter7": { "displayName": "Filter 7", "type": { "filter": true } },
-        "filter8": { "displayName": "Filter 8", "type": { "filter": true } },
         "showHeader": { "displayName": "Show Header", "type": { "bool": true } },
         "titleText": { "displayName": "Header Title", "type": { "text": true } },
         "showNoFilterMessage": { "displayName": "Show \"No Selection\" Message", "type": { "bool": true } },

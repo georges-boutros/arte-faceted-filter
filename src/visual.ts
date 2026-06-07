@@ -4,8 +4,10 @@ import { createRoot, Root } from "react-dom/client";
 import { FacetedFilterApp } from "./components/FacetedFilterApp";
 import { FacetColumn, FacetOption, SelectionMode, SelectorType } from "./models/Facet";
 import {
-  applyBasicValuesFilter,
+  applyAllFacetFilters,
+  BasicValuesFilter,
   clearFilter,
+  createBasicValuesFilter,
   FilterColumnTarget,
   parseQueryNameToTarget
 } from "./services/filterService";
@@ -22,8 +24,8 @@ import EnumerateVisualObjectInstancesOptions = powerbi.EnumerateVisualObjectInst
 import VisualObjectInstanceEnumeration = powerbi.VisualObjectInstanceEnumeration;
 
 const FILTER_OBJECT_NAME = "general";
+const FILTER_PROPERTY_NAME = "filter";
 const MAX_FACETS = 8;
-const FILTER_PROPERTY_NAMES = ["filter", "filter2", "filter3", "filter4", "filter5", "filter6", "filter7", "filter8"];
 
 export class Visual implements IVisual {
   private readonly host: powerbi.extensibility.visual.IVisualHost;
@@ -167,8 +169,7 @@ export class Visual implements IVisual {
         hidden: !!override.hidden,
         options: Array.from(optionMap.values()),
         availableKeys: new Set(optionMap.keys()),
-        selectedKeys: enforcedKeys,
-        filterPropertyName: FILTER_PROPERTY_NAMES[index] || `filter${index + 1}`
+        selectedKeys: enforcedKeys
       };
     });
 
@@ -238,13 +239,11 @@ export class Visual implements IVisual {
       allCandidates.push(...options.jsonFilters);
     }
     if (generalObject) {
-      for (const propertyName of FILTER_PROPERTY_NAMES) {
-        const raw = generalObject[propertyName];
-        if (Array.isArray(raw)) {
-          allCandidates.push(...raw);
-        } else if (raw) {
-          allCandidates.push(raw);
-        }
+      const raw = generalObject[FILTER_PROPERTY_NAME];
+      if (Array.isArray(raw)) {
+        allCandidates.push(...raw);
+      } else if (raw) {
+        allCandidates.push(raw);
       }
     }
 
@@ -295,20 +294,28 @@ export class Visual implements IVisual {
     };
   }
 
-  private applyFacetFilter(facet: FacetColumn): void {
-    const target = this.targets.get(facet.index);
-    if (!target) {
-      return;
+  /**
+   * Build the IFilter array for every facet that has at least one selected
+   * value, then apply (or clear) them all in a single host.applyJsonFilter
+   * call. This is the only way Power BI reliably cross-filters the rest of
+   * the report from a single visual — storing each facet in a different
+   * filter property only honoured the first slot.
+   */
+  private applyAllFilters(): void {
+    const filters: BasicValuesFilter[] = [];
+    for (const facet of this.facets) {
+      const target = this.targets.get(facet.index);
+      if (!target || facet.selectedKeys.length === 0) {
+        continue;
+      }
+      const rawValues = facet.selectedKeys.map((key) => {
+        const option = facet.options.find((o) => o.key === key);
+        return option ? option.rawValue : (key as powerbi.PrimitiveValue);
+      });
+      filters.push(createBasicValuesFilter(target, rawValues));
     }
-    if (!facet.selectedKeys.length) {
-      clearFilter(this.host, FILTER_OBJECT_NAME, facet.filterPropertyName);
-      return;
-    }
-    const rawValues = facet.selectedKeys.map((key) => {
-      const option = facet.options.find((o) => o.key === key);
-      return option ? option.rawValue : (key as powerbi.PrimitiveValue);
-    });
-    applyBasicValuesFilter(this.host, FILTER_OBJECT_NAME, facet.filterPropertyName, target, rawValues);
+
+    applyAllFacetFilters(this.host, FILTER_OBJECT_NAME, FILTER_PROPERTY_NAME, filters);
   }
 
   private onFacetSelectionChange = (facetIndex: number, nextKeys: string[]): void => {
@@ -325,18 +332,13 @@ export class Visual implements IVisual {
       facet.index === facetIndex ? { ...facet, selectedKeys: normalizedKeys } : facet
     );
 
-    this.applyFacetFilter({ ...targetFacet, selectedKeys: normalizedKeys });
+    this.applyAllFilters();
     this.render();
   };
 
   private onResetAll = (): void => {
     this.facets = this.facets.map((facet) => ({ ...facet, selectedKeys: [] }));
-    for (const facet of this.facets) {
-      const target = this.targets.get(facet.index);
-      if (target) {
-        clearFilter(this.host, FILTER_OBJECT_NAME, facet.filterPropertyName);
-      }
-    }
+    clearFilter(this.host, FILTER_OBJECT_NAME, FILTER_PROPERTY_NAME);
     this.render();
   };
 

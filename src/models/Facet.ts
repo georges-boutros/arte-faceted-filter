@@ -21,5 +21,4 @@ export interface FacetColumn {
   options: FacetOption[];
   availableKeys: Set<string>;
   selectedKeys: string[];
-  filterPropertyName: string;
 }
