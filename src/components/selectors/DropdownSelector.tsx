@@ -11,6 +11,10 @@ interface DropdownSelectorProps extends SelectorProps {
   embeddedTitle?: string;
 }
 
+const MIN_PANEL_HEIGHT = 120;
+const PANEL_MARGIN = 8;
+const MIN_PANEL_WIDTH = 200;
+
 export const DropdownSelector: React.FC<DropdownSelectorProps> = ({
   facet,
   options,
@@ -19,20 +23,85 @@ export const DropdownSelector: React.FC<DropdownSelectorProps> = ({
   embeddedTitle
 }) => {
   const [open, setOpen] = React.useState(false);
+  const [panelStyle, setPanelStyle] = React.useState<React.CSSProperties>({});
   const containerRef = React.useRef<HTMLDivElement | null>(null);
   const buttonRef = React.useRef<HTMLButtonElement | null>(null);
+  const panelRef = React.useRef<HTMLDivElement | null>(null);
+
+  // Compute panel position whenever it opens. Uses the iframe viewport
+  // (window.innerHeight/Width) since Power BI sandboxes the visual — we
+  // can't escape the frame but we can use every pixel available within it.
+  React.useLayoutEffect(() => {
+    if (!open || !buttonRef.current) {
+      return;
+    }
+
+    const updatePosition = () => {
+      const btn = buttonRef.current;
+      if (!btn) {
+        return;
+      }
+      const rect = btn.getBoundingClientRect();
+      const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
+      const viewportWidth = window.innerWidth || document.documentElement.clientWidth;
+
+      const spaceBelow = viewportHeight - rect.bottom - PANEL_MARGIN;
+      const spaceAbove = rect.top - PANEL_MARGIN;
+      // Flip up when there's clearly more room above and below is cramped.
+      const flipUp = spaceBelow < MIN_PANEL_HEIGHT && spaceAbove > spaceBelow;
+      const availableHeight = Math.max(MIN_PANEL_HEIGHT, flipUp ? spaceAbove : spaceBelow);
+
+      // Match button width but never go narrower than MIN_PANEL_WIDTH, and
+      // never wider than the viewport allows from the button's left edge.
+      const desiredWidth = Math.max(rect.width, MIN_PANEL_WIDTH);
+      const maxFromLeft = Math.max(MIN_PANEL_WIDTH, viewportWidth - rect.left - PANEL_MARGIN);
+      const width = Math.min(desiredWidth, maxFromLeft);
+      // If the button is so far right that even MIN_PANEL_WIDTH overflows,
+      // pin the panel to the viewport right edge instead.
+      const leftOverflow = rect.left + width > viewportWidth - PANEL_MARGIN;
+      const left = leftOverflow ? Math.max(PANEL_MARGIN, viewportWidth - width - PANEL_MARGIN) : rect.left;
+
+      const next: React.CSSProperties = {
+        position: "fixed",
+        left,
+        width,
+        maxHeight: availableHeight,
+        zIndex: 1000
+      };
+
+      if (flipUp) {
+        next.bottom = viewportHeight - rect.top + 4;
+      } else {
+        next.top = rect.bottom + 4;
+      }
+
+      setPanelStyle(next);
+    };
+
+    updatePosition();
+
+    const handleScroll = () => updatePosition();
+    window.addEventListener("resize", updatePosition);
+    window.addEventListener("scroll", handleScroll, true);
+    return () => {
+      window.removeEventListener("resize", updatePosition);
+      window.removeEventListener("scroll", handleScroll, true);
+    };
+  }, [open]);
 
   React.useEffect(() => {
     if (!open) {
       return;
     }
     const handleDocClick = (event: MouseEvent) => {
-      if (!containerRef.current) {
+      const target = event.target as Node;
+      if (containerRef.current?.contains(target)) {
         return;
       }
-      if (!containerRef.current.contains(event.target as Node)) {
-        setOpen(false);
+      if (panelRef.current?.contains(target)) {
+        return;
       }
+      setOpen(false);
     };
     const handleKey = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
@@ -117,14 +186,16 @@ export const DropdownSelector: React.FC<DropdownSelectorProps> = ({
 
       {open ? (
         <div
-          className="ff-dropdown__panel cds-date-selector__panel"
+          ref={panelRef}
+          className="ff-dropdown__panel"
           role="listbox"
           aria-multiselectable={facet.selectionMode === "multi"}
+          style={panelStyle}
         >
           {options.length === 0 ? (
             <div className="cds-date-selector__empty">{strings.noOptions}</div>
           ) : (
-            <div className="ff-dropdown__list cds-date-selector__list">
+            <div className="ff-dropdown__list">
               {options.map((option) => {
                 const isSelected = facet.selectedKeys.includes(option.key);
                 return (

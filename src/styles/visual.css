@@ -610,8 +610,32 @@
   background: var(--dropdown-bg);
 }
 
+/* Panel uses `position: fixed` anchored from JS (getBoundingClientRect).
+   This frees it from `.cds-root`'s `overflow: auto`, letting it use every
+   pixel of the visual's iframe regardless of how the visual is framed.
+   Power BI sandboxes custom visuals — the panel still can't paint OUTSIDE
+   the iframe, but inside it we no longer get clipped or scroll-trapped. */
 .ff-dropdown__panel {
-  z-index: 30;
+  display: flex;
+  flex-direction: column;
+  background: var(--panel-bg);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-elevation);
+  padding: 6px;
+  overflow: hidden;
+}
+
+.ff-dropdown__list {
+  display: grid;
+  gap: 2px;
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 2px;
+  background: var(--panel-bg);
+  border-radius: var(--radius);
 }
 
 /* Lovable-style: title embedded as muted prefix inside the dropdown button.
