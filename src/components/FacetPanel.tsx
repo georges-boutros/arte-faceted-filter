@@ -8,6 +8,7 @@ import { DropdownSelector } from "./selectors/DropdownSelector";
 import { ListSelector } from "./selectors/ListSelector";
 import { RadioSelector } from "./selectors/RadioSelector";
 import { ToggleSelector } from "./selectors/ToggleSelector";
+import { TypeaheadSelector } from "./selectors/TypeaheadSelector";
 
 interface FacetPanelProps {
   facet: FacetColumn;
@@ -38,8 +39,17 @@ export const FacetPanel: React.FC<FacetPanelProps> = ({
   );
 
   const selectionCount = facet.selectedKeys.length;
-  const isEmbeddedDropdown = embedTitleInDropdown && facet.selectorType === "dropdown";
-  const showSearchBar = showSearch && facet.selectorType !== "toggle" && facet.options.length > 6;
+  // Both dropdown and typeahead can absorb the facet title into their own
+  // affordances (Lovable-style label, search placeholder respectively).
+  const isEmbeddedDropdown =
+    embedTitleInDropdown && (facet.selectorType === "dropdown" || facet.selectorType === "typeahead");
+  // Typeahead and toggle carry their own affordances; don't double up with the
+  // facet-level search input.
+  const showSearchBar =
+    showSearch &&
+    facet.selectorType !== "toggle" &&
+    facet.selectorType !== "typeahead" &&
+    facet.options.length > 6;
 
   const handleSelectAll = () => {
     if (facet.selectionMode === "single") {
@@ -66,6 +76,13 @@ export const FacetPanel: React.FC<FacetPanelProps> = ({
           <DropdownSelector
             {...commonProps}
             embeddedTitle={isEmbeddedDropdown ? facet.title : undefined}
+          />
+        );
+      case "typeahead":
+        return (
+          <TypeaheadSelector
+            {...commonProps}
+            embeddedTitle={embedTitleInDropdown ? facet.title : undefined}
           />
         );
       case "chips":

@@ -403,8 +403,6 @@ function forceSelectionModeBySelector(selectorType: SelectorType, requested: Sel
   if (selectorType === "radio" || selectorType === "toggle") {
     return "single";
   }
-  if (selectorType === "checkbox" || selectorType === "chips" || selectorType === "list") {
-    return requested;
-  }
+  // dropdown, typeahead, checkbox, chips, list all support both modes.
   return requested;
 }

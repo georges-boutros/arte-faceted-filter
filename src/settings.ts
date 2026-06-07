@@ -385,6 +385,7 @@ function getOrientation(value: string): "auto" | "horizontal" | "vertical" {
 function getSelectorType(value: string): SelectorType {
   switch (value) {
     case "dropdown":
+    case "typeahead":
     case "chips":
     case "toggle":
     case "list":

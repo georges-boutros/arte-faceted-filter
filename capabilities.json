@@ -65,6 +65,7 @@
           "type": {
             "enumeration": [
               { "displayName": "Dropdown", "value": "dropdown" },
+              { "displayName": "Typeahead (search field, big data)", "value": "typeahead" },
               { "displayName": "Chips (vignettes)", "value": "chips" },
               { "displayName": "Toggle", "value": "toggle" },
               { "displayName": "List", "value": "list" },
@@ -104,6 +105,7 @@
             "enumeration": [
               { "displayName": "Use default", "value": "default" },
               { "displayName": "Dropdown", "value": "dropdown" },
+              { "displayName": "Typeahead (search field, big data)", "value": "typeahead" },
               { "displayName": "Chips (vignettes)", "value": "chips" },
               { "displayName": "Toggle", "value": "toggle" },
               { "displayName": "List", "value": "list" },

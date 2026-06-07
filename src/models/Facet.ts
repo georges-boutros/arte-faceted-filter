@@ -1,6 +1,6 @@
 import powerbi from "powerbi-visuals-api";
 
-export type SelectorType = "dropdown" | "chips" | "toggle" | "list" | "radio" | "checkbox";
+export type SelectorType = "dropdown" | "typeahead" | "chips" | "toggle" | "list" | "radio" | "checkbox";
 export type SelectionMode = "single" | "multi";
 export type FacetSortOrder = "asc" | "desc" | "data";
 
