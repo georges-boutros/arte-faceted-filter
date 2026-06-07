@@ -36,31 +36,31 @@ export class StyleSettings {
   public borderColor = "#e5e7eb";
   public dividerColor = "#eef0f3";
 
-  public textPrimaryColor = "#1f2328";
-  public textSecondaryColor = "#6b7280";
-  public placeholderColor = "#9aa0a6";
+  public textPrimaryColor = "#212831";
+  public textSecondaryColor = "#7a7a7a";
+  public placeholderColor = "#b3b0ad";
 
-  public accentColor = "#2f6feb";
-  public accentHoverColor = "#1f4fc4";
-  public selectedBackgroundColor = "#e7eef8";
-  public selectedTextColor = "#1f2328";
-  public focusBorderColor = "#c9d3e2";
+  public accentColor = "#fa471d";
+  public accentHoverColor = "#d93a17";
+  public selectedBackgroundColor = "#fde6df";
+  public selectedTextColor = "#212831";
+  public focusBorderColor = "#fdcdbe";
 
   public inputBackground = "#ffffff";
   public inputBorder = "#e5e7eb";
-  public inputTextColor = "#1f2328";
+  public inputTextColor = "#212831";
   public dropdownBackground = "#ffffff";
   public dropdownBorder = "#e5e7eb";
 
   public buttonBackground = "transparent";
   public buttonBorder = "#e5e7eb";
-  public buttonText = "#1f2328";
-  public iconColor = "#6b7280";
+  public buttonText = "#212831";
+  public iconColor = "#7a7a7a";
 
-  public hoverBackgroundColor = "#f4f5f7";
-  public disabledBackgroundColor = "#f4f5f7";
-  public disabledTextColor = "#b3b7be";
-  public shadowColor = "rgba(15, 23, 42, 0.08)";
+  public hoverBackgroundColor = "#f3f2f1";
+  public disabledBackgroundColor = "#f3f2f1";
+  public disabledTextColor = "#b3b0ad";
+  public shadowColor = "rgba(33, 40, 49, 0.08)";
 
   public borderRadius = 8;
   public fontSize = 12;

@@ -3,22 +3,24 @@
 }
 
 :root {
+  /* ARTE brand palette — kept in lockstep with arte-calendar-date-slicer */
+
   /* Surfaces */
   --visual-bg: #ffffff;
   --panel-bg: #ffffff;
   --surface-bg: #fafafa;
-  --hover-bg: #f4f5f7;
-  --selected-bg: #e7eef8;
-  --disabled-bg: #f4f5f7;
+  --hover-bg: #f3f2f1;
+  --selected-bg: #fde6df;
+  --disabled-bg: #f3f2f1;
 
   /* Text */
-  --text-primary: #1f2328;
-  --text-secondary: #6b7280;
-  --placeholder-color: #9aa0a6;
-  --disabled-text: #b3b7be;
-  --selected-text: #1f2328;
-  --button-text: #1f2328;
-  --input-text: #1f2328;
+  --text-primary: #212831;
+  --text-secondary: #7a7a7a;
+  --placeholder-color: #b3b0ad;
+  --disabled-text: #b3b0ad;
+  --selected-text: #212831;
+  --button-text: #212831;
+  --input-text: #212831;
 
   /* Borders */
   --border-color: #e5e7eb;
@@ -26,22 +28,22 @@
   --input-border: #e5e7eb;
   --dropdown-border: #e5e7eb;
   --button-border: #e5e7eb;
-  --focus-border: #c9d3e2;
+  --focus-border: #fdcdbe;
 
   /* Inputs / buttons */
   --input-bg: #ffffff;
   --dropdown-bg: #ffffff;
   --button-bg: transparent;
 
-  /* Accent + chip palette (ARTE orange en sélection forte) */
-  --accent-color: #2f6feb;
-  --accent-hover: #1f4fc4;
-  --icon-color: #6b7280;
-  --chip-selected-bg: #ff5a1f;
+  /* Accent + chip palette — ARTE orange */
+  --accent-color: #fa471d;
+  --accent-hover: #d93a17;
+  --icon-color: #7a7a7a;
+  --chip-selected-bg: #fa471d;
   --chip-selected-text: #ffffff;
 
   /* Elevation */
-  --shadow-elevation: 0 4px 12px rgba(15, 23, 42, 0.06), 0 1px 2px rgba(15, 23, 42, 0.04);
+  --shadow-elevation: 0 4px 12px rgba(33, 40, 49, 0.08), 0 1px 2px rgba(33, 40, 49, 0.04);
 
   /* Geometry */
   --radius-sm: 4px;
