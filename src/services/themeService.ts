@@ -38,6 +38,8 @@ interface ThemeTokens {
   shadowColor: string;
   chipSelectedBg: string;
   chipSelectedText: string;
+  scrollbarThumb: string;
+  scrollbarThumbHover: string;
 }
 
 // ARTE brand palette: accent = #fa471d, neutrals from the ARTE Power BI theme
@@ -71,7 +73,9 @@ const lightTheme: ThemeTokens = {
   disabledText: "#b3b0ad",
   shadowColor: "rgba(33, 40, 49, 0.08)",
   chipSelectedBg: "#fa471d",
-  chipSelectedText: "#ffffff"
+  chipSelectedText: "#ffffff",
+  scrollbarThumb: "rgba(33, 40, 49, 0.22)",
+  scrollbarThumbHover: "rgba(33, 40, 49, 0.40)"
 };
 
 const darkTheme: ThemeTokens = {
@@ -102,7 +106,9 @@ const darkTheme: ThemeTokens = {
   disabledText: "#7a7a7a",
   shadowColor: "rgba(0, 0, 0, 0.5)",
   chipSelectedBg: "#fa471d",
-  chipSelectedText: "#ffffff"
+  chipSelectedText: "#ffffff",
+  scrollbarThumb: "rgba(255, 255, 255, 0.18)",
+  scrollbarThumbHover: "rgba(255, 255, 255, 0.34)"
 };
 
 function hexToRgb(color: string): { r: number; g: number; b: number } | null {
@@ -183,7 +189,9 @@ function buildCustomTheme(style: StyleSettings, fallback: ThemeTokens): ThemeTok
     disabledText: normalizeColor(style.disabledTextColor, fallback.disabledText),
     shadowColor: normalizeColor(style.shadowColor, fallback.shadowColor),
     chipSelectedBg: fallback.chipSelectedBg,
-    chipSelectedText: fallback.chipSelectedText
+    chipSelectedText: fallback.chipSelectedText,
+    scrollbarThumb: fallback.scrollbarThumb,
+    scrollbarThumbHover: fallback.scrollbarThumbHover
   };
 }
 
@@ -239,6 +247,8 @@ export function resolveTheme(
     "--disabled-text": resolvedTheme.disabledText,
     "--chip-selected-bg": resolvedTheme.chipSelectedBg,
     "--chip-selected-text": resolvedTheme.chipSelectedText,
+    "--scrollbar-thumb": resolvedTheme.scrollbarThumb,
+    "--scrollbar-thumb-hover": resolvedTheme.scrollbarThumbHover,
     "--shadow-elevation": shadowValue,
     "--radius-sm": `${radiusSm}px`,
     "--radius": `${radius}px`,

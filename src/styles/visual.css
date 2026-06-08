@@ -42,6 +42,10 @@
   --chip-selected-bg: #fa471d;
   --chip-selected-text: #ffffff;
 
+  /* Scrollbars (theme-aware, overridden in dark mode via themeService injection) */
+  --scrollbar-thumb: rgba(33, 40, 49, 0.22);
+  --scrollbar-thumb-hover: rgba(33, 40, 49, 0.40);
+
   /* Elevation */
   --shadow-elevation: 0 4px 12px rgba(33, 40, 49, 0.08), 0 1px 2px rgba(33, 40, 49, 0.04);
 
@@ -65,6 +69,95 @@
   line-height: 1.35;
   padding: var(--space-unit);
   overflow: auto;
+  /* Crisp text rendering, especially important inside fixed-positioned
+     panels which can sit on sub-pixel boundaries. */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* ----------------------------------------------------------------
+   Modern, theme-aware scrollbars on every scrollable surface.
+   WebKit pseudo-elements DON'T inherit through fixed-position parents,
+   so we target each scrollable container explicitly.
+   ---------------------------------------------------------------- */
+.cds-root,
+.cds-date-selector__list,
+.ff-list,
+.ff-plain-list,
+.ff-chips,
+.ff-dropdown__panel,
+.ff-dropdown__list,
+.ff-typeahead__panel,
+.ff-typeahead__list,
+.ff-summary {
+  scrollbar-width: thin;
+  scrollbar-color: var(--scrollbar-thumb) transparent;
+}
+
+.cds-root::-webkit-scrollbar,
+.cds-date-selector__list::-webkit-scrollbar,
+.ff-list::-webkit-scrollbar,
+.ff-plain-list::-webkit-scrollbar,
+.ff-chips::-webkit-scrollbar,
+.ff-dropdown__panel::-webkit-scrollbar,
+.ff-dropdown__list::-webkit-scrollbar,
+.ff-typeahead__panel::-webkit-scrollbar,
+.ff-typeahead__list::-webkit-scrollbar,
+.ff-summary::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+  background: transparent;
+}
+
+.cds-root::-webkit-scrollbar-track,
+.cds-date-selector__list::-webkit-scrollbar-track,
+.ff-list::-webkit-scrollbar-track,
+.ff-plain-list::-webkit-scrollbar-track,
+.ff-chips::-webkit-scrollbar-track,
+.ff-dropdown__panel::-webkit-scrollbar-track,
+.ff-dropdown__list::-webkit-scrollbar-track,
+.ff-typeahead__panel::-webkit-scrollbar-track,
+.ff-typeahead__list::-webkit-scrollbar-track,
+.ff-summary::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.cds-root::-webkit-scrollbar-thumb,
+.cds-date-selector__list::-webkit-scrollbar-thumb,
+.ff-list::-webkit-scrollbar-thumb,
+.ff-plain-list::-webkit-scrollbar-thumb,
+.ff-chips::-webkit-scrollbar-thumb,
+.ff-dropdown__panel::-webkit-scrollbar-thumb,
+.ff-dropdown__list::-webkit-scrollbar-thumb,
+.ff-typeahead__panel::-webkit-scrollbar-thumb,
+.ff-typeahead__list::-webkit-scrollbar-thumb,
+.ff-summary::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb);
+  border-radius: 999px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+
+.cds-root::-webkit-scrollbar-thumb:hover,
+.cds-date-selector__list::-webkit-scrollbar-thumb:hover,
+.ff-list::-webkit-scrollbar-thumb:hover,
+.ff-plain-list::-webkit-scrollbar-thumb:hover,
+.ff-chips::-webkit-scrollbar-thumb:hover,
+.ff-dropdown__panel::-webkit-scrollbar-thumb:hover,
+.ff-dropdown__list::-webkit-scrollbar-thumb:hover,
+.ff-typeahead__panel::-webkit-scrollbar-thumb:hover,
+.ff-typeahead__list::-webkit-scrollbar-thumb:hover,
+.ff-summary::-webkit-scrollbar-thumb:hover {
+  background: var(--scrollbar-thumb-hover);
+  background-clip: padding-box;
+}
+
+.cds-root::-webkit-scrollbar-corner,
+.cds-date-selector__list::-webkit-scrollbar-corner,
+.ff-dropdown__panel::-webkit-scrollbar-corner,
+.ff-typeahead__panel::-webkit-scrollbar-corner {
+  background: transparent;
 }
 
 .cds-topbar {
@@ -712,6 +805,11 @@
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-elevation);
   overflow: hidden;
+  font-family: "Segoe UI", Arial, sans-serif;
+  font-size: var(--font-size);
+  color: var(--text-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 .ff-typeahead__list {
@@ -790,6 +888,14 @@
   box-shadow: var(--shadow-elevation);
   padding: 6px;
   overflow: hidden;
+  /* Fixed-positioned panels need their typography re-asserted — they sit
+     visually outside any visible parent and some PBI iframe configurations
+     don't propagate inherited font + smoothing. */
+  font-family: "Segoe UI", Arial, sans-serif;
+  font-size: var(--font-size);
+  color: var(--text-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 .ff-dropdown__list {

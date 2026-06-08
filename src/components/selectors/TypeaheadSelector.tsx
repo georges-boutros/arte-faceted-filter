@@ -97,17 +97,18 @@ export const TypeaheadSelector: React.FC<TypeaheadSelectorProps> = ({
       const leftOverflow = rect.left + width > vw - PANEL_MARGIN;
       const left = leftOverflow ? Math.max(PANEL_MARGIN, vw - width - PANEL_MARGIN) : rect.left;
 
+      // Round to integers — sub-pixel positions blur the text inside the panel.
       const next: React.CSSProperties = {
         position: "fixed",
-        left,
-        width,
-        maxHeight: availableHeight,
+        left: Math.round(left),
+        width: Math.round(width),
+        maxHeight: Math.round(availableHeight),
         zIndex: 1000
       };
       if (flipUp) {
-        next.bottom = vh - rect.top + 4;
+        next.bottom = Math.round(vh - rect.top + 4);
       } else {
-        next.top = rect.bottom + 4;
+        next.top = Math.round(rect.bottom + 4);
       }
       setPanelStyle(next);
     };

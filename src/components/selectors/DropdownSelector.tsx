@@ -61,18 +61,21 @@ export const DropdownSelector: React.FC<DropdownSelectorProps> = ({
       const leftOverflow = rect.left + width > viewportWidth - PANEL_MARGIN;
       const left = leftOverflow ? Math.max(PANEL_MARGIN, viewportWidth - width - PANEL_MARGIN) : rect.left;
 
+      // Round all positions to integers. getBoundingClientRect returns
+      // fractional values (e.g. 23.5px) which makes the fixed-positioned
+      // panel land on sub-pixel grid lines — that's what blurs the text.
       const next: React.CSSProperties = {
         position: "fixed",
-        left,
-        width,
-        maxHeight: availableHeight,
+        left: Math.round(left),
+        width: Math.round(width),
+        maxHeight: Math.round(availableHeight),
         zIndex: 1000
       };
 
       if (flipUp) {
-        next.bottom = viewportHeight - rect.top + 4;
+        next.bottom = Math.round(viewportHeight - rect.top + 4);
       } else {
-        next.top = rect.bottom + 4;
+        next.top = Math.round(rect.bottom + 4);
       }
 
       setPanelStyle(next);
