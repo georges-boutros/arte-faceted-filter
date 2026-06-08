@@ -17,7 +17,11 @@ export class GeneralSettings {
 
 export class LayoutSettings {
   public orientation: "auto" | "horizontal" | "vertical" = "auto";
-  public enableCascade = true;
+  // OFF by default. Cascade only makes sense when facets share a fact table —
+  // independent dimensions (Region + Date + Segment from different tables)
+  // would otherwise show empty cross-sections. Users who DO have related
+  // facets can switch this on in Layout → Cascade Filtering.
+  public enableCascade = false;
   public minFacetWidth = 220;
 }
 

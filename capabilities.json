@@ -46,7 +46,11 @@
             ]
           }
         },
-        "enableCascade": { "displayName": "Cascade Filtering", "type": { "bool": true } },
+        "enableCascade": {
+          "displayName": "Cascade Filtering (linked facets)",
+          "description": "Off by default. Turn on ONLY when the facets share rows in a single fact/dimension (e.g. Category → Subcategory → Brand from one product table). With independent dimensions (Region, Date, Segment, etc.) cascade produces empty option sets and confuses users — leave it off so each facet behaves like a standalone slicer.",
+          "type": { "bool": true }
+        },
         "minFacetWidth": { "displayName": "Min Facet Width (px)", "type": { "numeric": true } }
       }
     },

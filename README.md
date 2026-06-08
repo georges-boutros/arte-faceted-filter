@@ -4,7 +4,7 @@ Filtre à facettes Power BI conçu par la **Plateforme Data ARTE** pour ARTE.
 
 ## MVP livré
 - Plusieurs segments combinés dans un panneau unique (jusqu'à 8 facettes)
-- Cascade interne : la sélection dans une facette restreint dynamiquement les options des autres
+- Cascade interne **optionnelle** (désactivée par défaut) : la sélection dans une facette restreint dynamiquement les options des autres. À n'activer que quand les facettes partagent un même fait/dimension (ex. Catégorie → Sous-catégorie → Marque dans une table Produit). Pour des dimensions indépendantes (Région, Date, Segment…) laisser **off** — chaque facette se comporte alors comme un slicer autonome qui filtre uniquement sa propre colonne.
 - Mise en page horizontale ou verticale (auto ou forcée)
 - Types de sélecteurs au choix par facette : liste déroulante, vignettes (chips), bascules (toggles), liste, boutons radio, cases à cocher
 - Modes single / multi
