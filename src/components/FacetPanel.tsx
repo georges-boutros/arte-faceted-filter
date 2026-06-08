@@ -50,6 +50,15 @@ export const FacetPanel: React.FC<FacetPanelProps> = ({
     facet.selectorType !== "toggle" &&
     facet.selectorType !== "typeahead" &&
     facet.options.length > 6;
+  // Select-all / Clear-all helpers only make sense for selectors that show
+  // the whole option list inline. Dropdown and typeahead manage their own
+  // pick + remove flow (checkboxes inside the panel, × on each chip);
+  // doubling up the header actions just adds noise.
+  const showHeaderActions =
+    facet.selectionMode === "multi" &&
+    (facet.selectorType === "checkbox" ||
+      facet.selectorType === "chips" ||
+      facet.selectorType === "list");
 
   const handleSelectAll = () => {
     if (facet.selectionMode === "single") {
@@ -112,7 +121,7 @@ export const FacetPanel: React.FC<FacetPanelProps> = ({
               <span className="ff-facet__count">{selectionCount}</span>
             ) : null}
           </div>
-          {facet.selectionMode === "multi" && facet.selectorType !== "toggle" ? (
+          {showHeaderActions ? (
             <div className="ff-facet__actions">
               {visibleOptions.length > 0 ? (
                 <button

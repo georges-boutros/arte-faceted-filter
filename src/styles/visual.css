@@ -751,13 +751,15 @@
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  height: 22px;
-  padding: 0 4px 0 8px;
+  height: 24px;
+  padding: 0 4px 0 10px;
   background: var(--chip-selected-bg);
   color: var(--chip-selected-text);
+  border: 1px solid var(--chip-selected-bg);
   border-radius: 999px;
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 600;
+  line-height: 1;
   max-width: calc(100% - 8px);
   overflow: hidden;
 }
@@ -773,8 +775,8 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 16px;
-  height: 16px;
+  width: 18px;
+  height: 18px;
   padding: 0;
   border: 0;
   border-radius: 999px;
@@ -976,19 +978,6 @@
   color: var(--text-secondary);
 }
 
-/* Slightly tighter chip dimensions when used inside the footer */
-.cds-footer .ff-summary__chip {
-  height: 24px;
-  font-size: 11px;
-  padding-left: 8px;
-  gap: 4px;
-}
-
-.cds-footer .ff-summary__chip-remove {
-  width: 18px;
-  height: 18px;
-}
-
 /* ----------------------------------------------------------------
    Selection Summary — read-only removable chips
    ---------------------------------------------------------------- */
@@ -999,23 +988,33 @@
   gap: var(--space-unit);
 }
 
-/* Compact variant: chips flow inline with their facet title baked into
-   each chip ("Category: Marketing ×"). Used in the interactive footer. */
+/* Compact variant: facet title shown once as a small muted label, then the
+   chips for that facet inline next to it ("Catégorie · [Marketing ×]
+   [Sales ×]"). One small inline group per facet flows together. */
 .ff-summary--compact {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+
+.ff-summary__inline-group {
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
   gap: var(--cell-space);
+  min-width: 0;
 }
 
-.ff-summary__chip-prefix {
-  color: rgba(255, 255, 255, 0.85);
-  font-weight: 500;
-}
-
-.ff-summary__chip-sep {
-  color: rgba(255, 255, 255, 0.6);
-  margin: 0 4px 0 2px;
+.ff-summary__inline-label {
+  flex: 0 0 auto;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-right: 2px;
 }
 
 .ff-summary__empty {
@@ -1054,8 +1053,8 @@
 .ff-summary__chip {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  height: 28px;
+  gap: 4px;
+  height: 24px;
   padding: 0 4px 0 10px;
   background: var(--chip-selected-bg);
   color: var(--chip-selected-text);
@@ -1063,8 +1062,18 @@
   border-radius: 999px;
   font-size: 12px;
   font-weight: 600;
+  line-height: 1;
   max-width: 100%;
   overflow: hidden;
+  vertical-align: middle;
+}
+
+/* Count variant: rendered when a facet has more selected values than the
+   fold threshold. Visually identical chip + reads "12 selected" instead
+   of stuffing 12 individual chips into the layout. */
+.ff-summary__chip--count {
+  font-style: italic;
+  font-weight: 700;
 }
 
 .ff-summary__chip-value {
@@ -1078,8 +1087,8 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 20px;
-  height: 20px;
+  width: 18px;
+  height: 18px;
   padding: 0;
   border: 0;
   border-radius: 999px;

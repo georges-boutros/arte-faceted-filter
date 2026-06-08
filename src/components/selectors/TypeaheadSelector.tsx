@@ -158,8 +158,10 @@ export const TypeaheadSelector: React.FC<TypeaheadSelectorProps> = ({
       return;
     }
     onChange([...facet.selectedKeys, key]);
-    setQuery("");
-    // keep panel open in multi-mode so the user can pick several values
+    // Keep the query AND the panel open in multi-mode. The picked value is
+    // automatically filtered out of `matches` by the selectedSet filter, so
+    // the remaining matches stay visible and the user can rapid-fire pick
+    // several values from the same search without retyping.
     inputRef.current?.focus();
   };
 
