@@ -88,27 +88,6 @@ export const TypeaheadSelector: React.FC<TypeaheadSelectorProps> = ({
       const vw = window.innerWidth || document.documentElement.clientWidth;
       const spaceBelow = vh - rect.bottom - PANEL_MARGIN;
       const spaceAbove = rect.top - PANEL_MARGIN;
-
-      // Power BI iframe-sandboxes custom visuals — we can never paint outside
-      // the visual frame the way native slicers do. When the area both below
-      // and above the input is too cramped, cover the whole visual instead
-      // of clinging to a thin strip under the input.
-      const fullVisualFallback =
-        spaceBelow < MIN_PANEL_HEIGHT && spaceAbove < MIN_PANEL_HEIGHT;
-
-      if (fullVisualFallback) {
-        setPanelStyle({
-          position: "fixed",
-          top: PANEL_MARGIN,
-          left: PANEL_MARGIN,
-          right: PANEL_MARGIN,
-          bottom: PANEL_MARGIN,
-          maxHeight: vh - PANEL_MARGIN * 2,
-          zIndex: 1000
-        });
-        return;
-      }
-
       const flipUp = spaceBelow < MIN_PANEL_HEIGHT && spaceAbove > spaceBelow;
       const availableHeight = Math.max(MIN_PANEL_HEIGHT, flipUp ? spaceAbove : spaceBelow);
 

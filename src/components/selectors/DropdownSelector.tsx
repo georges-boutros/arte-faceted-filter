@@ -47,29 +47,6 @@ export const DropdownSelector: React.FC<DropdownSelectorProps> = ({
 
       const spaceBelow = viewportHeight - rect.bottom - PANEL_MARGIN;
       const spaceAbove = rect.top - PANEL_MARGIN;
-
-      // Custom visuals can't escape the Power BI iframe — that's a platform
-      // sandboxing constraint, only native slicers can paint outside their
-      // frame. When BOTH the room below and the room above are too small
-      // (typical case: visual sits in a narrow horizontal strip), fall back
-      // to covering the entire visual frame so the user gets every pixel
-      // the visual has, not just the strip below the button.
-      const fullVisualFallback =
-        spaceBelow < MIN_PANEL_HEIGHT && spaceAbove < MIN_PANEL_HEIGHT;
-
-      if (fullVisualFallback) {
-        setPanelStyle({
-          position: "fixed",
-          top: PANEL_MARGIN,
-          left: PANEL_MARGIN,
-          right: PANEL_MARGIN,
-          bottom: PANEL_MARGIN,
-          maxHeight: viewportHeight - PANEL_MARGIN * 2,
-          zIndex: 1000
-        });
-        return;
-      }
-
       // Flip up when there's clearly more room above and below is cramped.
       const flipUp = spaceBelow < MIN_PANEL_HEIGHT && spaceAbove > spaceBelow;
       const availableHeight = Math.max(MIN_PANEL_HEIGHT, flipUp ? spaceAbove : spaceBelow);
