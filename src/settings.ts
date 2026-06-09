@@ -34,7 +34,7 @@ export class FacetDefaultsSettings {
 
 export class StyleSettings {
   public themeMode: "auto" | "light" | "dark" | "custom" = "auto";
-  public visualBackground = "#ffffff";
+  public visualBackground = "transparent";
   public panelBackground = "#ffffff";
   public surfaceBackground = "#fafafa";
   public borderColor = "#e5e7eb";

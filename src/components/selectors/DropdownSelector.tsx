@@ -1,5 +1,6 @@
 import * as React from "react";
 import { ChevronIcon } from "../../icons/ChevronIcon";
+import { FacetOption } from "../../models/Facet";
 import { SelectorProps } from "./types";
 
 interface DropdownSelectorProps extends SelectorProps {
@@ -14,6 +15,14 @@ interface DropdownSelectorProps extends SelectorProps {
 const MIN_PANEL_HEIGHT = 120;
 const PANEL_MARGIN = 8;
 const MIN_PANEL_WIDTH = 200;
+/** Show a search input + bulk-action toolbar once the panel has enough
+ *  options that scrolling would be tedious. */
+const SEARCH_THRESHOLD = 8;
+
+/** Case- and diacritic-insensitive contains. */
+function normalize(value: string): string {
+  return value.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "");
+}
 
 export const DropdownSelector: React.FC<DropdownSelectorProps> = ({
   facet,
@@ -23,10 +32,12 @@ export const DropdownSelector: React.FC<DropdownSelectorProps> = ({
   embeddedTitle
 }) => {
   const [open, setOpen] = React.useState(false);
+  const [query, setQuery] = React.useState("");
   const [panelStyle, setPanelStyle] = React.useState<React.CSSProperties>({});
   const containerRef = React.useRef<HTMLDivElement | null>(null);
   const buttonRef = React.useRef<HTMLButtonElement | null>(null);
   const panelRef = React.useRef<HTMLDivElement | null>(null);
+  const searchRef = React.useRef<HTMLInputElement | null>(null);
 
   // Compute panel position whenever it opens. Uses the iframe viewport
   // (window.innerHeight/Width) since Power BI sandboxes the visual — we
@@ -56,14 +67,10 @@ export const DropdownSelector: React.FC<DropdownSelectorProps> = ({
       const desiredWidth = Math.max(rect.width, MIN_PANEL_WIDTH);
       const maxFromLeft = Math.max(MIN_PANEL_WIDTH, viewportWidth - rect.left - PANEL_MARGIN);
       const width = Math.min(desiredWidth, maxFromLeft);
-      // If the button is so far right that even MIN_PANEL_WIDTH overflows,
-      // pin the panel to the viewport right edge instead.
       const leftOverflow = rect.left + width > viewportWidth - PANEL_MARGIN;
       const left = leftOverflow ? Math.max(PANEL_MARGIN, viewportWidth - width - PANEL_MARGIN) : rect.left;
 
-      // Round all positions to integers. getBoundingClientRect returns
-      // fractional values (e.g. 23.5px) which makes the fixed-positioned
-      // panel land on sub-pixel grid lines — that's what blurs the text.
+      // Round to integers — sub-pixel positions blur the text in the panel.
       const next: React.CSSProperties = {
         position: "fixed",
         left: Math.round(left),
@@ -94,6 +101,7 @@ export const DropdownSelector: React.FC<DropdownSelectorProps> = ({
 
   React.useEffect(() => {
     if (!open) {
+      setQuery("");
       return;
     }
     const handleDocClick = (event: MouseEvent) => {
@@ -119,6 +127,17 @@ export const DropdownSelector: React.FC<DropdownSelectorProps> = ({
       document.removeEventListener("keydown", handleKey);
     };
   }, [open]);
+
+  const filteredOptions: FacetOption[] = React.useMemo(() => {
+    const q = normalize(query.trim());
+    if (!q) {
+      return options;
+    }
+    return options.filter((option) => normalize(option.label).includes(q));
+  }, [options, query]);
+
+  const showSearch = options.length >= SEARCH_THRESHOLD;
+  const showToolbar = facet.selectionMode === "multi" && options.length >= SEARCH_THRESHOLD;
 
   const selectionSummary = React.useMemo(() => {
     if (!facet.selectedKeys.length) {
@@ -150,6 +169,17 @@ export const DropdownSelector: React.FC<DropdownSelectorProps> = ({
     }
     onChange(Array.from(set));
   };
+
+  // Additive: union of current selection + current matches.
+  const selectAllVisible = () => {
+    const union = new Set<string>(facet.selectedKeys);
+    for (const option of filteredOptions) {
+      union.add(option.key);
+    }
+    onChange(Array.from(union));
+  };
+
+  const clearAll = () => onChange([]);
 
   return (
     <div className="ff-dropdown" ref={containerRef}>
@@ -195,11 +225,46 @@ export const DropdownSelector: React.FC<DropdownSelectorProps> = ({
           aria-multiselectable={facet.selectionMode === "multi"}
           style={panelStyle}
         >
-          {options.length === 0 ? (
+          {showSearch ? (
+            <input
+              type="search"
+              ref={searchRef}
+              className="ff-dropdown__search"
+              placeholder={strings.search}
+              value={query}
+              onChange={(event) => setQuery(event.target.value)}
+              autoFocus
+            />
+          ) : null}
+
+          {showToolbar ? (
+            <div className="ff-dropdown__toolbar">
+              {filteredOptions.length > 0 ? (
+                <button
+                  type="button"
+                  className="ff-dropdown__toolbar-action"
+                  onClick={selectAllVisible}
+                >
+                  {strings.selectAll}
+                </button>
+              ) : null}
+              {hasSelection ? (
+                <button
+                  type="button"
+                  className="ff-dropdown__toolbar-action"
+                  onClick={clearAll}
+                >
+                  {strings.clearSelection}
+                </button>
+              ) : null}
+            </div>
+          ) : null}
+
+          {filteredOptions.length === 0 ? (
             <div className="cds-date-selector__empty">{strings.noOptions}</div>
           ) : (
             <div className="ff-dropdown__list">
-              {options.map((option) => {
+              {filteredOptions.map((option) => {
                 const isSelected = facet.selectedKeys.includes(option.key);
                 return (
                   <label

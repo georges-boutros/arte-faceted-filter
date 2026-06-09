@@ -16,6 +16,9 @@ interface FacetedFilterAppProps {
   viewportWidth: number;
   viewportHeight: number;
   reportTheme: ReportThemeContext;
+  /** Optional title coming from a DAX measure (titleMeasure data role).
+   *  Wins over settings.general.titleText when present. */
+  dynamicTitle: string | null;
   onFacetSelectionChange: (facetIndex: number, keys: string[]) => void;
   onResetAll: () => void;
 }
@@ -28,6 +31,7 @@ export const FacetedFilterApp: React.FC<FacetedFilterAppProps> = ({
   viewportWidth,
   viewportHeight,
   reportTheme,
+  dynamicTitle,
   onFacetSelectionChange,
   onResetAll
 }) => {
@@ -59,7 +63,15 @@ export const FacetedFilterApp: React.FC<FacetedFilterAppProps> = ({
   const isSelectionOnly = settings.general.displayMode === "selection-only";
   const showTopBar = settings.general.showHeader || settings.general.showReset;
   const fallbackTitle = isSelectionOnly ? strings.activeFilters : strings.title;
-  const resolvedTitle = settings.general.titleText?.trim() ? settings.general.titleText : fallbackTitle;
+  // Priority order for the header title:
+  //   1. Dynamic title from the optional titleMeasure data role (DAX)
+  //   2. Static titleText set in the format pane
+  //   3. Locale-aware fallback ("Facettes" / "Active filters" / etc.)
+  const resolvedTitle = dynamicTitle && dynamicTitle.trim()
+    ? dynamicTitle.trim()
+    : settings.general.titleText?.trim()
+      ? settings.general.titleText
+      : fallbackTitle;
   const showFooter =
     !isSelectionOnly &&
     settings.general.showFooter &&

@@ -169,6 +169,25 @@ export const TypeaheadSelector: React.FC<TypeaheadSelectorProps> = ({
     onChange(facet.selectedKeys.filter((k) => k !== key));
   };
 
+  // Additive: add every currently-visible match to the selection without
+  // dropping anything that was already there.
+  const selectAllVisible = () => {
+    if (facet.selectionMode === "single") {
+      return;
+    }
+    const union = new Set<string>(facet.selectedKeys);
+    for (const option of matches) {
+      union.add(option.key);
+    }
+    onChange(Array.from(union));
+    inputRef.current?.focus();
+  };
+
+  const clearAll = () => {
+    onChange([]);
+    inputRef.current?.focus();
+  };
+
   const handleInputKey = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "ArrowDown") {
       event.preventDefault();
@@ -276,6 +295,31 @@ export const TypeaheadSelector: React.FC<TypeaheadSelectorProps> = ({
           role="listbox"
           style={panelStyle}
         >
+          {facet.selectionMode === "multi" && (matches.length > 0 || facet.selectedKeys.length > 0) ? (
+            <div className="ff-typeahead__toolbar">
+              {matches.length > 0 ? (
+                <button
+                  type="button"
+                  className="ff-typeahead__toolbar-action"
+                  onMouseDown={(e) => e.preventDefault()}
+                  onClick={selectAllVisible}
+                >
+                  {strings.selectAll}
+                </button>
+              ) : null}
+              {facet.selectedKeys.length > 0 ? (
+                <button
+                  type="button"
+                  className="ff-typeahead__toolbar-action"
+                  onMouseDown={(e) => e.preventDefault()}
+                  onClick={clearAll}
+                >
+                  {strings.clearSelection}
+                </button>
+              ) : null}
+            </div>
+          ) : null}
+
           {matches.length === 0 ? (
             <div className="ff-typeahead__empty">
               {query.trim() ? strings.noOptions : strings.noOptions}

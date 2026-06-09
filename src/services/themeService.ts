@@ -46,7 +46,7 @@ interface ThemeTokens {
 // files. Kept in lockstep with arte-calendar-date-slicer so visuals on the
 // same report blend together without manual tweaking.
 const lightTheme: ThemeTokens = {
-  visualBg: "#ffffff",
+  visualBg: "transparent",
   panelBg: "#ffffff",
   surfaceBg: "#fafafa",
   inputBg: "#ffffff",
@@ -79,7 +79,7 @@ const lightTheme: ThemeTokens = {
 };
 
 const darkTheme: ThemeTokens = {
-  visualBg: "#151515",
+  visualBg: "transparent",
   panelBg: "#1f1f1f",
   surfaceBg: "#1a1a1a",
   inputBg: "#000000",

@@ -40,6 +40,10 @@ export class Visual implements IVisual {
   private viewportWidth = 0;
   private viewportHeight = 0;
   private reportTheme: ReportThemeContext = {};
+  /** Resolved title value from the optional titleMeasure data role. When set
+   *  it overrides general.titleText so multilingual reports can drive the
+   *  visual title from a DAX measure (SWITCH USERCULTURE, etc.). */
+  private dynamicTitle: string | null = null;
   /**
    * Last-observed external filter signature per facet (keyed by queryName).
    * We only resync a facet's selection from external state when its signature
@@ -74,6 +78,7 @@ export class Visual implements IVisual {
     this.viewportHeight = options.viewport?.height || 0;
     this.locale = resolveVisualLocale(this.host.locale);
     this.reportTheme = this.extractReportTheme();
+    this.dynamicTitle = this.extractDynamicTitle(dataView);
 
     const { facets, rows, metadataColumns, targets } = this.buildFacetsFromDataView(dataView);
     this.targets = targets;
@@ -342,6 +347,25 @@ export class Visual implements IVisual {
     this.render();
   };
 
+  /**
+   * Pull the first scalar value of the titleMeasure data role, if bound.
+   * Returns null when the role is unbound or the value is empty — caller
+   * then falls back to general.titleText / locale default.
+   */
+  private extractDynamicTitle(dataView: DataView): string | null {
+    const valueColumns = dataView.categorical?.values || [];
+    const titleColumn = valueColumns.find((column) => column.source.roles?.titleMeasure);
+    if (!titleColumn) {
+      return null;
+    }
+    const raw = titleColumn.values?.find((value) => value !== null && value !== undefined && value !== "");
+    if (raw === undefined || raw === null) {
+      return null;
+    }
+    const trimmed = String(raw).trim();
+    return trimmed.length ? trimmed : null;
+  }
+
   private extractReportTheme(): ReportThemeContext {
     const palette = this.host.colorPalette as powerbi.extensibility.ISandboxExtendedColorPalette | undefined;
     if (!palette) {
@@ -374,6 +398,7 @@ export class Visual implements IVisual {
         viewportWidth: this.viewportWidth,
         viewportHeight: this.viewportHeight,
         reportTheme: this.reportTheme,
+        dynamicTitle: this.dynamicTitle,
         onFacetSelectionChange: this.onFacetSelectionChange,
         onResetAll: this.onResetAll
       })

@@ -64,7 +64,15 @@ export const FacetPanel: React.FC<FacetPanelProps> = ({
     if (facet.selectionMode === "single") {
       return;
     }
-    onSelectionChange(visibleOptions.map((option) => option.key));
+    // Additive semantics: union the currently visible matches with whatever
+    // was selected before. Without this, doing "search be → Select all → search
+    // ze → Select all" would wipe the be entries because Select all replaced
+    // the whole selection with the new match set.
+    const union = new Set<string>(facet.selectedKeys);
+    for (const option of visibleOptions) {
+      union.add(option.key);
+    }
+    onSelectionChange(Array.from(union));
   };
 
   const handleClear = () => {

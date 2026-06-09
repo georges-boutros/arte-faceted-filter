@@ -6,6 +6,12 @@
       "description": "Ajoutez jusqu'à 8 colonnes catégorielles. Chaque colonne devient une facette dans le panneau.",
       "name": "facetField",
       "kind": "Grouping"
+    },
+    {
+      "displayName": "Title (measure)",
+      "description": "Optionnel. Une mesure DAX dont la valeur scalaire remplace le titre du visual — pratique pour les rapports multilingues (ex. SWITCH(USERCULTURE(), \"fr-FR\", \"Filtres\", \"en-US\", \"Filters\")).",
+      "name": "titleMeasure",
+      "kind": "Measure"
     }
   ],
   "objects": {
@@ -177,13 +183,17 @@
     {
       "conditions": [
         {
-          "facetField": { "max": 8 }
+          "facetField": { "max": 8 },
+          "titleMeasure": { "max": 1 }
         }
       ],
       "categorical": {
         "categories": {
           "for": { "in": "facetField" },
           "dataReductionAlgorithm": { "window": { "count": 30000 } }
+        },
+        "values": {
+          "select": [{ "bind": { "to": "titleMeasure" } }]
         }
       }
     }
