@@ -17,6 +17,10 @@ const MAX_VISIBLE_MATCHES = 50;
 const MIN_PANEL_HEIGHT = 140;
 const PANEL_MARGIN = 8;
 const MIN_PANEL_WIDTH = 220;
+/** Beyond this many selected values, collapse the individual chips inside
+ *  the input into a single "N selected ×" count chip. Keeps the input row
+ *  readable when the user has piled up dozens of selections. */
+const CHIP_FOLD_THRESHOLD = 3;
 
 /** Diacritic-insensitive, case-insensitive normalisation so "Cinéma" matches
  *  a search for "cinema". */
@@ -228,6 +232,15 @@ export const TypeaheadSelector: React.FC<TypeaheadSelectorProps> = ({
       : `${strings.search}…`
     : "";
 
+  // Above CHIP_FOLD_THRESHOLD selections we render a single count chip
+  // instead of N individual chips — keeps the input row from wrapping
+  // into a wall of pills. The tooltip lists every label so the user can
+  // still audit the selection without expanding.
+  const showCountChip = selectedOptions.length > CHIP_FOLD_THRESHOLD;
+  const countChipTooltip = showCountChip
+    ? selectedOptions.map((option) => option.label).join(", ")
+    : "";
+
   return (
     <div className="ff-typeahead" ref={containerRef}>
       <div
@@ -240,18 +253,24 @@ export const TypeaheadSelector: React.FC<TypeaheadSelectorProps> = ({
           setOpen(true);
         }}
       >
-        {selectedOptions.map((option) => (
-          <span key={option.key} className="ff-typeahead__chip" onClick={(e) => e.stopPropagation()}>
-            <span className="ff-typeahead__chip-value">{option.label}</span>
+        {showCountChip ? (
+          <span
+            className="ff-typeahead__chip ff-typeahead__chip--count"
+            onClick={(e) => e.stopPropagation()}
+            title={countChipTooltip}
+          >
+            <span className="ff-typeahead__chip-value">
+              {selectedOptions.length} {strings.selected}
+            </span>
             <button
               type="button"
               className="ff-typeahead__chip-remove"
               onClick={(e) => {
                 e.stopPropagation();
-                removeValue(option.key);
+                clearAll();
               }}
-              aria-label={`${strings.removeValue} ${option.label}`}
-              title={`${strings.removeValue} ${option.label}`}
+              aria-label={`${strings.clearSelection}`}
+              title={strings.clearSelection}
             >
               <svg width="10" height="10" viewBox="0 0 10 10" aria-hidden="true">
                 <path
@@ -263,7 +282,32 @@ export const TypeaheadSelector: React.FC<TypeaheadSelectorProps> = ({
               </svg>
             </button>
           </span>
-        ))}
+        ) : (
+          selectedOptions.map((option) => (
+            <span key={option.key} className="ff-typeahead__chip" onClick={(e) => e.stopPropagation()}>
+              <span className="ff-typeahead__chip-value">{option.label}</span>
+              <button
+                type="button"
+                className="ff-typeahead__chip-remove"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  removeValue(option.key);
+                }}
+                aria-label={`${strings.removeValue} ${option.label}`}
+                title={`${strings.removeValue} ${option.label}`}
+              >
+                <svg width="10" height="10" viewBox="0 0 10 10" aria-hidden="true">
+                  <path
+                    d="M2 2 L8 8 M8 2 L2 8"
+                    stroke="currentColor"
+                    strokeWidth="1.6"
+                    strokeLinecap="round"
+                  />
+                </svg>
+              </button>
+            </span>
+          ))
+        )}
         <input
           type="text"
           ref={inputRef}

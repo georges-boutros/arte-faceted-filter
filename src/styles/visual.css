@@ -717,7 +717,10 @@
   padding: 3px 32px 3px 6px;
   border: 1px solid var(--input-border);
   border-radius: var(--radius);
-  background: var(--input-bg);
+  /* Transparent so the report background bleeds through — the typeahead
+     reads as a slim input, not a filled button. The border carries the
+     "this is an editable field" affordance on its own. */
+  background: transparent;
   cursor: text;
   position: relative;
   transition: border-color 120ms ease, box-shadow 120ms ease;
@@ -763,6 +766,14 @@
   line-height: 1;
   max-width: calc(100% - 8px);
   overflow: hidden;
+}
+
+/* Count variant: rendered when more than CHIP_FOLD_THRESHOLD values are
+   selected. Italic + bold to read as a summary rather than a literal value.
+   × on this chip clears the entire selection. */
+.ff-typeahead__chip--count {
+  font-style: italic;
+  font-weight: 700;
 }
 
 .ff-typeahead__chip-value {
