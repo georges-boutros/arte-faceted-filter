@@ -254,6 +254,8 @@ export function resolveTheme(
     "--radius": `${radius}px`,
     "--radius-lg": `${radiusLg}px`,
     "--font-size": `${Math.max(10, Math.min(24, style.fontSize || 12))}px`,
+    "--font-size-sm": `${Math.max(9, Math.min(22, (style.fontSize || 12) - 1))}px`,
+    "--font-size-xs": `${Math.max(8, Math.min(20, (style.fontSize || 12) - 2))}px`,
     "--font-family": style.fontFamily || "Segoe UI, Arial, sans-serif",
     "--space-unit": `${spacingUnit}px`,
     "--cell-space": `${Math.max(0, Math.min(14, style.cellSpacing || 4))}px`

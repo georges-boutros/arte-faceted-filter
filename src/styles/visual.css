@@ -55,6 +55,8 @@
   --radius: 8px;
   --radius-lg: 12px;
   --font-size: 12px;
+  --font-size-sm: 11px;
+  --font-size-xs: 10px;
   --font-family: "Segoe UI", Arial, sans-serif;
   --space-unit: 8px;
   --cell-space: 4px;
@@ -71,10 +73,10 @@
   line-height: 1.35;
   padding: var(--space-unit);
   overflow: auto;
-  /* Crisp text rendering, especially important inside fixed-positioned
-     panels which can sit on sub-pixel boundaries. */
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  /* Let the host OS pick the right text rendering. On Windows (Power BI's
+     primary platform) that means ClearType subpixel rendering, which is
+     visibly sharper than forced grayscale antialiasing. macOS keeps its
+     own native antialiasing. */
   text-rendering: optimizeLegibility;
 }
 
@@ -176,7 +178,7 @@
 
 .cds-title {
   margin: 0;
-  font-size: 12px;
+  font-size: var(--font-size);
   font-weight: 600;
   color: var(--text-primary);
 }
@@ -248,7 +250,7 @@
   background: var(--button-bg);
   color: var(--button-text);
   border-radius: var(--radius);
-  font-size: 12px;
+  font-size: var(--font-size);
   padding: 0 12px;
   cursor: pointer;
   white-space: nowrap;
@@ -285,7 +287,7 @@
   border: 1px solid var(--input-border);
   border-radius: var(--radius);
   padding: 0 10px;
-  font-size: 12px;
+  font-size: var(--font-size);
   color: var(--text-primary);
   background: var(--input-bg);
   display: flex;
@@ -339,7 +341,7 @@
   border: 1px solid var(--input-border);
   border-radius: var(--radius);
   padding: 0 10px;
-  font-size: 12px;
+  font-size: var(--font-size);
   color: var(--input-text);
   background: var(--input-bg);
 }
@@ -386,13 +388,13 @@
 }
 
 .cds-date-selector__item span {
-  font-size: 12px;
+  font-size: var(--font-size);
   line-height: 1.2;
 }
 
 .cds-date-selector__empty {
   padding: 6px;
-  font-size: 12px;
+  font-size: var(--font-size);
   color: var(--text-secondary);
 }
 
@@ -400,7 +402,7 @@
   margin-top: var(--space-unit);
   padding-top: 8px;
   border-top: 1px solid var(--divider-color);
-  font-size: 11px;
+  font-size: var(--font-size-sm);
   color: var(--text-secondary);
 }
 
@@ -426,7 +428,7 @@
   padding: 16px;
   text-align: center;
   color: var(--text-secondary);
-  font-size: 12px;
+  font-size: var(--font-size);
 }
 
 .ff-facet {
@@ -457,7 +459,7 @@
 }
 
 .ff-facet__title-text {
-  font-size: 12px;
+  font-size: var(--font-size);
   font-weight: 600;
   color: var(--text-primary);
   white-space: nowrap;
@@ -472,7 +474,7 @@
   min-width: 18px;
   height: 18px;
   padding: 0 6px;
-  font-size: 10px;
+  font-size: var(--font-size-xs);
   font-weight: 600;
   border-radius: 999px;
   background: var(--chip-selected-bg);
@@ -488,7 +490,7 @@
 .ff-facet__action {
   height: 22px !important;
   padding: 0 6px !important;
-  font-size: 10px !important;
+  font-size: var(--font-size-xs) !important;
   border-radius: var(--radius-sm) !important;
 }
 
@@ -500,7 +502,7 @@
 .ff-facet__empty {
   padding: 6px 4px;
   color: var(--text-secondary);
-  font-size: 11px;
+  font-size: var(--font-size-sm);
 }
 
 .ff-facet__body {
@@ -551,7 +553,7 @@
 }
 
 .ff-list__label {
-  font-size: 12px;
+  font-size: var(--font-size);
   line-height: 1.25;
   white-space: nowrap;
   overflow: hidden;
@@ -580,7 +582,7 @@
   padding: 6px 10px;
   border-radius: var(--radius-sm);
   cursor: pointer;
-  font-size: 12px;
+  font-size: var(--font-size);
 }
 
 .ff-plain-list__item:hover {
@@ -617,7 +619,7 @@
   color: var(--button-text);
   border: 1px solid var(--button-border);
   border-radius: 999px;
-  font-size: 12px;
+  font-size: var(--font-size);
   cursor: pointer;
   white-space: nowrap;
   max-width: 100%;
@@ -671,7 +673,7 @@
   border: 0;
   border-radius: 999px;
   color: var(--text-secondary);
-  font-size: 12px;
+  font-size: var(--font-size);
   font-weight: 500;
   cursor: pointer;
   white-space: nowrap;
@@ -744,7 +746,7 @@
   padding: 0 4px;
   background: transparent;
   color: var(--input-text);
-  font-size: 12px;
+  font-size: var(--font-size);
   outline: none;
 }
 
@@ -762,7 +764,7 @@
   color: var(--chip-selected-text);
   border: 1px solid var(--chip-selected-bg);
   border-radius: 999px;
-  font-size: 12px;
+  font-size: var(--font-size);
   font-weight: 600;
   line-height: 1;
   max-width: calc(100% - 8px);
@@ -823,8 +825,6 @@
   font-family: var(--font-family);
   font-size: var(--font-size);
   color: var(--text-primary);
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
 }
 
 .ff-typeahead__list {
@@ -846,7 +846,7 @@
   border: 0;
   background: transparent;
   color: var(--text-primary);
-  font-size: 12px;
+  font-size: var(--font-size);
   text-align: left;
   border-radius: var(--radius-sm);
   cursor: pointer;
@@ -868,13 +868,13 @@
 .ff-typeahead__empty {
   padding: 10px;
   color: var(--text-secondary);
-  font-size: 12px;
+  font-size: var(--font-size);
   text-align: center;
 }
 
 .ff-typeahead__more {
   padding: 6px 10px;
-  font-size: 11px;
+  font-size: var(--font-size-sm);
   color: var(--text-secondary);
   border-top: 1px solid var(--divider-color);
   background: var(--surface-bg);
@@ -903,14 +903,13 @@
   box-shadow: var(--shadow-elevation);
   padding: 6px;
   overflow: hidden;
-  /* Fixed-positioned panels need their typography re-asserted — they sit
+  /* Fixed-positioned panels need typography re-asserted — they sit
      visually outside any visible parent and some PBI iframe configurations
-     don't propagate inherited font + smoothing. */
+     don't propagate inherited font into them. Font smoothing left to the
+     OS so Windows ClearType isn't disabled inside the panel. */
   font-family: var(--font-family);
   font-size: var(--font-size);
   color: var(--text-primary);
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
 }
 
 .ff-dropdown__list {
@@ -934,7 +933,7 @@
   border: 1px solid var(--input-border);
   border-radius: var(--radius);
   padding: 0 8px;
-  font-size: 12px;
+  font-size: var(--font-size);
   color: var(--input-text);
   background: var(--input-bg);
   font-family: var(--font-family);
@@ -966,7 +965,7 @@
   border: 0;
   border-radius: var(--radius-sm);
   color: var(--text-secondary);
-  font-size: 11px;
+  font-size: var(--font-size-sm);
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.02em;
@@ -985,7 +984,10 @@
 .ff-dropdown__btn--embedded {
   height: 34px;
   padding: 0 12px;
-  border-radius: 999px;
+  /* Use the same configurable radius as the typeahead control so adjacent
+     fields read as one visual family. Was pill (999px) — too much contrast
+     when sat next to the rounded-rectangle typeahead and search inputs. */
+  border-radius: var(--radius);
   background: var(--surface-bg);
   border-color: var(--input-border);
   transition: background-color 120ms ease, border-color 120ms ease, box-shadow 120ms ease;
@@ -1077,7 +1079,7 @@
 
 .ff-summary__inline-label {
   flex: 0 0 auto;
-  font-size: 11px;
+  font-size: var(--font-size-sm);
   font-weight: 600;
   color: var(--text-secondary);
   text-transform: uppercase;
@@ -1088,7 +1090,7 @@
 .ff-summary__empty {
   padding: 10px 4px;
   color: var(--text-secondary);
-  font-size: 12px;
+  font-size: var(--font-size);
   text-align: left;
 }
 
@@ -1102,7 +1104,7 @@
 .ff-summary__group-label {
   flex: 0 0 auto;
   padding: 4px 0;
-  font-size: 11px;
+  font-size: var(--font-size-sm);
   font-weight: 600;
   color: var(--text-secondary);
   text-transform: uppercase;
@@ -1128,7 +1130,7 @@
   color: var(--chip-selected-text);
   border: 1px solid var(--chip-selected-bg);
   border-radius: 999px;
-  font-size: 12px;
+  font-size: var(--font-size);
   font-weight: 600;
   line-height: 1;
   max-width: 100%;
@@ -1234,7 +1236,7 @@
   }
   .ff-chip,
   .cds-chip {
-    font-size: 11px;
+    font-size: var(--font-size-sm);
   }
 }
 
