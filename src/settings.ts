@@ -68,6 +68,7 @@ export class StyleSettings {
 
   public borderRadius = 8;
   public fontSize = 12;
+  public fontFamily = "Segoe UI, Arial, sans-serif";
   public compactDensity = 0;
   public shadowEnabled = true;
   public cellSpacing = 4;
@@ -207,6 +208,9 @@ export class VisualSettings {
       36
     );
     settings.style.fontSize = clamp(getValue<number>(objects, "style", "fontSize", settings.style.fontSize), 10, 24);
+    settings.style.fontFamily = sanitizeFontFamily(
+      getValue<string>(objects, "style", "fontFamily", settings.style.fontFamily)
+    );
     settings.style.compactDensity = clamp(
       getValue<number>(objects, "style", "compactDensity", settings.style.compactDensity),
       0,
@@ -346,6 +350,7 @@ export class VisualSettings {
               themeMode: settings.style.themeMode,
               borderRadius: settings.style.borderRadius,
               fontSize: settings.style.fontSize,
+              fontFamily: settings.style.fontFamily,
               compactDensity: settings.style.compactDensity,
               shadowEnabled: settings.style.shadowEnabled,
               cellSpacing: settings.style.cellSpacing
@@ -445,4 +450,19 @@ function clamp(value: number, min: number, max: number): number {
     return min;
   }
   return Math.max(min, Math.min(max, value));
+}
+
+/**
+ * Allow only safe CSS font-family characters (letters, numbers, spaces,
+ * commas, hyphens, quotes). Strips anything that could close the CSS rule
+ * (`}`, `;`, `<`, etc.) so an attacker can't inject styles through the
+ * format pane.
+ */
+function sanitizeFontFamily(value: string | undefined): string {
+  const fallback = "Segoe UI, Arial, sans-serif";
+  if (!value) {
+    return fallback;
+  }
+  const cleaned = value.replace(/[^a-zA-Z0-9\s,'"\-]/g, "").trim();
+  return cleaned.length ? cleaned : fallback;
 }

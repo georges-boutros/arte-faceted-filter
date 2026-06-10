@@ -171,8 +171,17 @@
         "disabledBackgroundColor": { "displayName": "Disabled Background", "type": { "fill": { "solid": { "color": true } } } },
         "disabledTextColor": { "displayName": "Disabled Text", "type": { "fill": { "solid": { "color": true } } } },
         "shadowColor": { "displayName": "Shadow Color", "type": { "fill": { "solid": { "color": true } } } },
-        "borderRadius": { "displayName": "Border Radius", "type": { "numeric": true } },
+        "borderRadius": {
+          "displayName": "Border Radius",
+          "description": "Applique aux boutons, inputs, panneaux et card. Les chips restent pill-shape (999px) pour la lisibilité.",
+          "type": { "numeric": true }
+        },
         "fontSize": { "displayName": "Font Size", "type": { "numeric": true } },
+        "fontFamily": {
+          "displayName": "Font Family",
+          "description": "Stack CSS — ex. \"Segoe UI, Arial, sans-serif\" ou \"ARTE Sans, Helvetica Neue, sans-serif\". Appliqué uniformément à tous les sélecteurs, chips, panels et inputs.",
+          "type": { "text": true }
+        },
         "compactDensity": { "displayName": "Compact Density", "type": { "numeric": true } },
         "shadowEnabled": { "displayName": "Shadow On", "type": { "bool": true } },
         "cellSpacing": { "displayName": "Cell Spacing", "type": { "numeric": true } }
