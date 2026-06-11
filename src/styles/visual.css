@@ -86,7 +86,6 @@
    so we target each scrollable container explicitly.
    ---------------------------------------------------------------- */
 .cds-root,
-.cds-date-selector__list,
 .ff-list,
 .ff-plain-list,
 .ff-chips,
@@ -100,7 +99,6 @@
 }
 
 .cds-root::-webkit-scrollbar,
-.cds-date-selector__list::-webkit-scrollbar,
 .ff-list::-webkit-scrollbar,
 .ff-plain-list::-webkit-scrollbar,
 .ff-chips::-webkit-scrollbar,
@@ -115,7 +113,6 @@
 }
 
 .cds-root::-webkit-scrollbar-track,
-.cds-date-selector__list::-webkit-scrollbar-track,
 .ff-list::-webkit-scrollbar-track,
 .ff-plain-list::-webkit-scrollbar-track,
 .ff-chips::-webkit-scrollbar-track,
@@ -128,7 +125,6 @@
 }
 
 .cds-root::-webkit-scrollbar-thumb,
-.cds-date-selector__list::-webkit-scrollbar-thumb,
 .ff-list::-webkit-scrollbar-thumb,
 .ff-plain-list::-webkit-scrollbar-thumb,
 .ff-chips::-webkit-scrollbar-thumb,
@@ -144,7 +140,6 @@
 }
 
 .cds-root::-webkit-scrollbar-thumb:hover,
-.cds-date-selector__list::-webkit-scrollbar-thumb:hover,
 .ff-list::-webkit-scrollbar-thumb:hover,
 .ff-plain-list::-webkit-scrollbar-thumb:hover,
 .ff-chips::-webkit-scrollbar-thumb:hover,
@@ -158,7 +153,6 @@
 }
 
 .cds-root::-webkit-scrollbar-corner,
-.cds-date-selector__list::-webkit-scrollbar-corner,
 .ff-dropdown__panel::-webkit-scrollbar-corner,
 .ff-typeahead__panel::-webkit-scrollbar-corner {
   background: transparent;
@@ -320,43 +314,6 @@
   align-items: center;
 }
 
-.cds-date-selector__panel {
-  position: absolute;
-  top: calc(100% + 6px);
-  left: 0;
-  right: 0;
-  z-index: 9;
-  border: 1px solid var(--divider-color);
-  border-radius: var(--radius-lg);
-  background: var(--panel-bg);
-  box-shadow: var(--shadow-elevation);
-  padding: 8px;
-  display: grid;
-  gap: 6px;
-}
-
-.cds-date-selector__search {
-  width: 100%;
-  height: 30px;
-  border: 1px solid var(--input-border);
-  border-radius: var(--radius);
-  padding: 0 10px;
-  font-size: var(--font-size);
-  color: var(--input-text);
-  background: var(--input-bg);
-}
-
-.cds-date-selector__list {
-  display: grid;
-  gap: 2px;
-  max-height: 240px;
-  overflow: auto;
-  border: 1px solid var(--divider-color);
-  border-radius: var(--radius);
-  padding: 4px;
-  background: var(--panel-bg);
-}
-
 .cds-date-selector__item {
   display: flex;
   align-items: center;
@@ -374,7 +331,7 @@
 
 .cds-date-selector__item.is-selected {
   background: var(--selected-bg);
-  color: var(--text-primary);
+  color: var(--selected-text);
   font-weight: 500;
 }
 
@@ -538,7 +495,7 @@
 
 .ff-list__item.is-selected {
   background: var(--selected-bg);
-  color: var(--text-primary);
+  color: var(--selected-text);
   font-weight: 500;
 }
 
@@ -591,6 +548,7 @@
 
 .ff-plain-list__item.is-selected {
   background: var(--selected-bg);
+  color: var(--selected-text);
   font-weight: 600;
 }
 
@@ -647,8 +605,8 @@
 }
 
 .ff-chip.is-selected:hover {
-  background: var(--chip-selected-bg);
-  filter: brightness(1.05);
+  background: var(--accent-hover);
+  border-color: var(--accent-hover);
 }
 
 /* Toggle (segmented control) */
@@ -687,6 +645,10 @@
   background: var(--accent-color);
   color: #ffffff;
   font-weight: 600;
+}
+
+.ff-toggle__item.is-selected:hover {
+  background: var(--accent-hover);
 }
 
 .ff-toggle__item:focus-visible {
@@ -818,7 +780,7 @@
   display: flex;
   flex-direction: column;
   background: var(--panel-bg);
-  border: 1px solid var(--border-color);
+  border: 1px solid var(--dropdown-border);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-elevation);
   overflow: hidden;
@@ -898,7 +860,7 @@
   display: flex;
   flex-direction: column;
   background: var(--panel-bg);
-  border: 1px solid var(--border-color);
+  border: 1px solid var(--dropdown-border);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-elevation);
   padding: 6px;
